@@ -1148,7 +1148,7 @@ const CFG = {
   OWNER_PW: 'kinggg2026',
   OWNER_NAME: 'KingGG',
   GROQ_MODEL: 'llama-3.3-70b-versatile',
-  FREE_VIP_SLOTS: 5,
+  FREE_VIP_SLOTS: 10,
 };
 
 // ── THEME ──
@@ -1780,6 +1780,7 @@ setInterval(async()=>{
   initNav();
   await loadAll();
   await loadPosts();
+  await loadVIPReqs(); // load VIP requests langsung di sini
   renderAll();
 
   // Mobile nav — satu definisi
@@ -1809,10 +1810,16 @@ const VIP_PAYMENT = {
 let vipRequests = [], _vipMethod = 'dana', _vipPackId = null, _vipTier = 'paid';
 
 async function loadVIPReqs(){
-  if(!isDBReady()) return;
-  try{ vipRequests=await jbRead('vipReqs'); if(!Array.isArray(vipRequests)) vipRequests=[]; }catch{}
+  // Coba dari DB dulu, fallback ke localStorage
+  if(isDBReady()){
+    try{ vipRequests=await jbRead('vipReqs'); if(!Array.isArray(vipRequests)) vipRequests=[]; return; }catch{}
+  }
+  // Fallback localStorage
+  try{ vipRequests=JSON.parse(localStorage.getItem('mcaddn-vipReqs')||'[]'); }catch{ vipRequests=[] }
 }
 async function saveVIPReqs(){
+  // Selalu simpan ke localStorage sebagai backup
+  localStorage.setItem('mcaddn-vipReqs', JSON.stringify(vipRequests));
   if(!isDBReady()) return;
   try{ await jbWrite('vipReqs',vipRequests); }catch{}
 }
@@ -2025,18 +2032,20 @@ async function submitVIPRequest(){
   document.getElementById('vipStep3').style.display='block';
 }
 
-// Step 3 success - update text based on tier
-function goVipStep1(){ // override for reset
-  document.getElementById('vipStep1').style.display='block';
-  document.getElementById('vipStep2').style.display='none';
-  document.getElementById('vipStep3').style.display='none';
-  updateSlotUI();
-}
-
 // Admin VIP panel
 function renderAdminVIPPanel(){
   if(!isAdmin) return;
-  const el = document.getElementById('vipAdminSection');
+  // Buat container kalau belum ada
+  let el = document.getElementById('vipAdminSection');
+  if(!el){
+    const ac = document.getElementById('adminContent');
+    if(!ac) return;
+    const div = document.createElement('div');
+    div.style.cssText='margin-top:16px;padding-top:14px;border-top:1px solid var(--border)';
+    div.innerHTML=`<div style="font-size:12px;font-weight:800;color:var(--vip);display:flex;align-items:center;gap:6px;margin-bottom:10px">${si('ic-crown',13)} VIP Requests</div><div id="vipAdminSection"></div>`;
+    ac.appendChild(div);
+    el = document.getElementById('vipAdminSection');
+  }
   if(!el) return;
   const pending = vipRequests.filter(r=>r.status==='pending');
   const approved = vipRequests.filter(r=>r.status==='approved');
@@ -2097,25 +2106,14 @@ async function adminRejectVIP(reqId){
 const _bgcOrig = bgc;
 bgc = function(e,id){ if(id==='vipov'&&e.target.id===id) closeOv('vipov'); else _bgcOrig(e,id); };
 
-// Patch renderAdminPanel
+// Patch renderAdminPanel to also show VIP requests
 const _rapOrig = renderAdminPanel;
 renderAdminPanel = function(){
   _rapOrig();
-  if(!document.getElementById('vipAdminSection') && isAdmin){
-    const ac = document.getElementById('adminContent');
-    if(ac){
-      const div = document.createElement('div');
-      div.style.cssText='margin-top:16px;padding-top:14px;border-top:1px solid var(--border)';
-      div.innerHTML=`<div style="font-size:12px;font-weight:800;color:var(--vip);display:flex;align-items:center;gap:6px;margin-bottom:10px">${si('ic-crown',13)} VIP Requests</div><div id="vipAdminSection"></div>`;
-      ac.appendChild(div);
-    }
-  }
   renderAdminVIPPanel();
 };
 
-// Patch loadAll
-const _laorig = loadAll;
-loadAll = async function(){ await _laorig(); await loadVIPReqs(); };
 </script>
 </body>
 </html>
+
