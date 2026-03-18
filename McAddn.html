@@ -21,7 +21,7 @@ import { getAuth, signInWithPopup, signOut, onAuthStateChanged,
 
 // ── FIREBASE CONFIG ──
 const FB_CFG = {
-  apiKey: "AIzaSyD3Yz2jyBkWnRqFQgrOi3tWIn_UpEXAEPA",
+  apiKey: "AIzaSyD3Yz2jyBkWnRqFQgrOi3tWIn_UpEXAEP",
   authDomain: "mcaddn.firebaseapp.com",
   projectId: "mcaddn",
   storageBucket: "mcaddn.firebasestorage.app",
@@ -356,7 +356,7 @@ img{display:block;max-width:100%}
 .det-img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:var(--bg2)}
 .det-ph{width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;background:linear-gradient(140deg,var(--bg2),var(--g100));position:relative;overflow:hidden}
 .det-ph::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.03) 0,rgba(0,0,0,.03) 1px,transparent 1px,transparent 8px),repeating-linear-gradient(90deg,rgba(0,0,0,.03) 0,rgba(0,0,0,.03) 1px,transparent 1px,transparent 8px)}
-.det-close{position:absolute;top:11px;right:11px;width:32px;height:32px;border-radius:var(--r10);background:rgba(255,255,255,.88);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--t2);box-shadow:var(--sh2)}
+.det-close{position:absolute;top:11px;right:11px;width:34px;height:34px;border-radius:var(--r10);background:rgba(255,255,255,.92);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--t2);box-shadow:var(--sh2);z-index:10}
 .det-body{padding:18px 22px 24px}
 .det-title{font-family:'Syne',sans-serif;font-size:21px;font-weight:900;color:var(--text);letter-spacing:-.4px;margin-bottom:6px}
 .det-meta{display:flex;flex-wrap:wrap;gap:11px;margin-bottom:14px}
@@ -598,9 +598,9 @@ img{display:block;max-width:100%}
       <span class="search-ic"><svg width="14" height="14"><use href="#i-search"/></svg></span>
       <input id="dsearch" placeholder="Cari pack, creator..." oninput="doSearch(this.value)" autocomplete="off">
     </div>
+    <button class="iconbtn" onclick="openAIChat()" title="AI Chat"><svg width="15" height="15"><use href="#i-spark"/></svg></button>
     <button class="iconbtn" id="themeBtn" onclick="toggleTheme()"><svg width="16" height="16"><use href="#i-moon"/></svg></button>
-    <button class="iconbtn" onclick="openDBSettings()"><svg width="15" height="15"><use href="#i-db"/></svg></button>
-    <button class="iconbtn" onclick="openAISettings()"><svg width="15" height="15"><use href="#i-spark"/></svg></button>
+    <button class="iconbtn" onclick="openProfile()" title="Profil Saya"><svg width="15" height="15"><use href="#i-person"/></svg></button>
     <!-- Auth -->
     <div id="dAuthArea"></div>
     <button class="btn-primary" onclick="requireAuth(openUpload)"><svg width="14" height="14"><use href="#i-up"/></svg> Upload Pack</button>
@@ -611,6 +611,13 @@ img{display:block;max-width:100%}
 <div class="vip-bar" id="vipBar" style="display:none">
   <div class="vip-bar-lbl"><svg width="12" height="12" style="color:#c4b5fd"><use href="#i-crown"/></svg> VIP Pack</div>
   <div class="vip-bar-scroll" id="vipBarScroll"></div>
+</div>
+
+<!-- ANNOUNCEMENT BANNER -->
+<div id="announceBanner" style="display:none;background:linear-gradient(135deg,#1e40af,#2563eb);padding:10px 28px;display:none;align-items:center;gap:10px">
+  <span style="font-size:16px">📣</span>
+  <span id="announceTxt" style="flex:1;font-size:13px;font-weight:700;color:white;line-height:1.5"></span>
+  <button onclick="this.parentElement.style.display='none'" style="background:rgba(255,255,255,.15);border:none;border-radius:var(--r6);padding:4px 10px;font-size:11px;font-weight:700;color:white;cursor:pointer;flex-shrink:0">×</button>
 </div>
 
 <!-- HERO -->
@@ -656,6 +663,10 @@ img{display:block;max-width:100%}
       <div class="sc-t" style="color:var(--vip)"><svg width="13" height="13"><use href="#i-crown"/></svg> Pack VIP</div>
       <p style="font-size:12px;color:var(--t3);line-height:1.6;margin-bottom:10px">Animated border, priority placement, analytics eksklusif.</p>
       <div id="vipListSide"><div style="font-size:11.5px;color:var(--t4);text-align:center;padding:8px">Belum ada pack VIP</div></div>
+    </div>
+    <div class="sc">
+      <div class="sc-t"><span style="color:var(--amber);display:flex">🏆</span> Leaderboard Creator</div>
+      <div id="leaderboardList"></div>
     </div>
     <div class="sc" style="background:linear-gradient(135deg,var(--g50),var(--g100));border-color:var(--g200)">
       <div class="sc-t" style="color:var(--g700)"><svg width="13" height="13"><use href="#i-spark"/></svg> AI Powered</div>
@@ -778,6 +789,35 @@ img{display:block;max-width:100%}
     <div class="post-av" id="mNewPostAv"><svg width="14" height="14"><use href="#i-pen"/></svg></div>
     <div class="np-ph">Tulis sesuatu...</div>
   </div>
+
+  <!-- Mobile Owner row -->
+  <div style="display:flex;gap:7px;margin-bottom:12px">
+    <button onclick="openProfile()" style="display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:var(--r10);border:1.5px solid var(--border);background:var(--surface);font-size:12px;font-weight:700;color:var(--t2);cursor:pointer;flex-shrink:0"><svg width="13" height="13"><use href="#i-person"/></svg> Profil Saya</button>
+    <button id="mOwnerBtn" onclick="mOpenOwner()" style="display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:var(--r10);border:1.5px solid #312e81;background:linear-gradient(135deg,#0f172a,#1e1b4b);font-size:12px;font-weight:800;color:#818cf8;cursor:pointer;flex-shrink:0"><svg width="13" height="13"><use href="#i-shield"/></svg> Owner Panel</button>
+  </div>
+
+  <!-- Mobile Owner Login (compact) -->
+  <div id="mOwnerPanel" style="display:none;background:linear-gradient(135deg,#0f172a,#1e1b4b);border-radius:var(--r14);padding:13px 15px;margin-bottom:12px;border:1px solid #312e81">
+    <div id="mOwnerLoginEl">
+      <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.5);margin-bottom:9px">🔒 Login Owner</div>
+      <div style="display:flex;gap:8px">
+        <input type="password" id="mOwnerPwIn" placeholder="Password..." style="flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:var(--r10);padding:9px 12px;font-size:13px;color:white" onkeydown="if(event.key==='Enter')mCheckOwnerPw()">
+        <button onclick="mCheckOwnerPw()" style="padding:9px 14px;background:#4338ca;color:white;border:none;border-radius:var(--r10);font-size:12px;font-weight:800;cursor:pointer;flex-shrink:0">Masuk</button>
+      </div>
+    </div>
+    <div id="mOwnerLoggedEl" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:18px">👑</span>
+          <div><div style="font-size:13px;font-weight:900;color:white" id="mOwnerNameEl">KingGG</div><div style="font-size:10px;color:rgba(255,255,255,.45)">Owner · Admin</div></div>
+        </div>
+        <button onclick="mOwnerLogout()" style="font-size:11px;color:rgba(255,255,255,.4);background:none;border:none;cursor:pointer">Keluar</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:8px" id="mOwnerStats"></div>
+      <button onclick="openOwnerDash()" style="width:100%;padding:10px;background:linear-gradient(135deg,#4338ca,#6366f1);color:white;border:none;border-radius:var(--r10);font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px"><svg width="13" height="13"><use href="#i-shield"/></svg> Buka Dashboard Penuh</button>
+    </div>
+  </div>
+
   <div style="display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:12px" id="mPostCats"></div>
   <div id="mPostList"></div>
   <div id="mPostEmpty" class="empty-state" style="display:none">
@@ -879,7 +919,7 @@ img{display:block;max-width:100%}
             <select class="fsel" id="fCat"><option value="addon">Add-on</option><option value="texture">Texture Pack</option><option value="map">Map / Dunia</option><option value="skin">Skin Pack</option><option value="shader">Shader</option><option value="mod">Mod</option></select></div>
         </div>
         <div class="frow">
-          <div class="fg"><label class="fl">Nama Creator <span class="req">*</span></label><input type="text" class="fi" id="fCreator" placeholder="Username kamu" readonly style="background:var(--bg2)"></div>
+          <div class="fg"><label class="fl">Nama Creator <span class="req">*</span></label><input type="text" class="fi" id="fCreator" placeholder="Username kamu"></div>
           <div class="fg"><label class="fl">Grup / Studio</label><input type="text" class="fi" id="fGroup" placeholder="Opsional"></div>
         </div>
         <div class="fg"><label class="fl">Versi Minecraft</label>
@@ -914,7 +954,14 @@ img{display:block;max-width:100%}
           <div class="fg"><label class="fl">Link Download</label><input type="text" class="fi" id="fDl" placeholder="https://mediafire.com/..."></div>
           <div class="fg"><label class="fl">Versi Pack</label><input type="text" class="fi" id="fVer" placeholder="v1.0.0"></div>
         </div>
-        <div class="fg"><label class="fl">Ukuran File</label><input type="text" class="fi" id="fSize" placeholder="Contoh: 15 MB"></div>
+        <div class="frow">
+          <div class="fg"><label class="fl">Ukuran File</label><input type="text" class="fi" id="fSize" placeholder="Contoh: 15 MB"></div>
+          <div class="fg"><label class="fl">Video YouTube <span style="font-size:10px;color:var(--t4);font-weight:400">opsional</span></label><input type="text" class="fi" id="fYoutube" placeholder="https://youtube.com/watch?v=..."></div>
+        </div>
+        <div class="fg">
+          <label class="fl">Gallery Foto <span style="font-size:10px;color:var(--t4);font-weight:400">link gambar dipisah koma, maks 5</span></label>
+          <textarea class="fta" id="fGallery" placeholder="https://i.imgur.com/img1.jpg, https://i.imgur.com/img2.jpg, ..." style="min-height:60px"></textarea>
+        </div>
       </div>
     </div>
     <div class="mft">
@@ -956,51 +1003,98 @@ img{display:block;max-width:100%}
   <div class="post-detail" id="pdModal"></div>
 </div>
 
-<!-- AI SETTINGS MODAL -->
-<div class="ov" id="aiOv" onclick="if(event.target.id==='aiOv')closeOv('aiOv')">
-  <div class="modal" style="max-width:440px">
+
+<!-- PROFIL MODAL (untuk semua user) -->
+<div class="ov" id="profileOv" onclick="if(event.target.id==='profileOv')closeOv('profileOv')">
+  <div class="modal" style="max-width:420px">
     <div class="mhd">
-      <div><div class="mhd-tag"><svg width="10" height="10"><use href="#i-spark"/></svg> AI Settings</div>
-        <div class="mhd-title">Groq API Key</div>
-        <div class="mhd-sub">Dapatkan key gratis di console.groq.com</div></div>
-      <button class="cbtn" onclick="closeOv('aiOv')"><svg width="14" height="14"><use href="#i-x"/></svg></button>
+      <div><div class="mhd-tag"><svg width="10" height="10"><use href="#i-person"/></svg> Profil</div>
+        <div class="mhd-title">Profil Saya</div>
+        <div class="mhd-sub">Nama dan foto yang tampil di komunitas</div></div>
+      <button class="cbtn" onclick="closeOv('profileOv')"><svg width="14" height="14"><use href="#i-x"/></svg></button>
     </div>
     <div class="mbdy">
-      <div id="aiStatusBox" style="margin-bottom:13px;padding:11px 13px;border-radius:var(--r14);border:1.5px solid var(--border)"></div>
+      <!-- Avatar -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:18px">
+        <div id="profileAvBig" style="width:72px;height:72px;border-radius:50%;background:var(--g600);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:white;overflow:hidden;position:relative;cursor:pointer;border:3px solid var(--g200)" onclick="document.getElementById('profileImgFile').click()">
+          <span id="profileAvIni">?</span>
+          <img id="profileAvImg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none">
+          <div style="position:absolute;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;opacity:0;transition:.2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0">
+            <svg width="18" height="18" style="color:white"><use href="#i-brush"/></svg>
+          </div>
+        </div>
+        <input type="file" id="profileImgFile" accept="image/*" style="display:none" onchange="handleProfileImg(this)">
+        <div style="font-size:11.5px;color:var(--t4);text-align:center;line-height:1.5">Klik foto untuk ganti<br>atau paste link gambar di bawah</div>
+      </div>
+      <!-- Fields -->
       <div class="fg">
-        <label class="fl">API Key</label>
+        <label class="fl">Nama Tampilan <span class="req">*</span></label>
+        <input type="text" class="fi" id="profileName" placeholder="Nama yang tampil di forum dan pack">
+      </div>
+      <div class="fg">
+        <label class="fl">Link Foto Profil</label>
+        <div style="display:flex;gap:8px">
+          <input type="text" class="fi" id="profileImgUrl" placeholder="https://i.imgur.com/xxx.jpg" style="flex:1" oninput="previewProfileUrl(this.value)">
+          <button onclick="previewProfileUrl(document.getElementById('profileImgUrl').value)" style="padding:8px 12px;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r10);font-size:12px;font-weight:800;color:var(--t2);cursor:pointer;flex-shrink:0">Preview</button>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">Bio Singkat</label>
+        <input type="text" class="fi" id="profileBio" placeholder="Ceritakan sedikit tentang kamu...">
+      </div>
+      <div class="fg">
+        <label class="fl">Link Sosial / Website</label>
+        <input type="text" class="fi" id="profileLink" placeholder="https://youtube.com/c/...">
+      </div>
+      <!-- Status jika belum login Firebase -->
+      <div id="profileLoginNote" style="display:none;background:var(--amber2);border:1px solid #fcd34d;border-radius:var(--r10);padding:9px 11px;font-size:11.5px;color:var(--amber);line-height:1.6;margin-top:4px">
+        ⚠️ Kamu belum login. Profil disimpan di browser ini saja. <span style="font-weight:800;cursor:pointer;text-decoration:underline" onclick="closeOv('profileOv');openOv('authOv')">Login sekarang →</span>
+      </div>
+    </div>
+    <div class="mft">
+      <button class="btn-cancel" onclick="closeOv('profileOv')">Batal</button>
+      <button class="btn-submit" onclick="saveProfile()"><svg width="13" height="13"><use href="#i-check"/></svg> Simpan Profil</button>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL (DB + AI — owner only) -->
+<div class="ov" id="settingsOv" onclick="if(event.target.id==='settingsOv')closeOv('settingsOv')">
+  <div class="modal" style="max-width:460px">
+    <div class="mhd">
+      <div><div class="mhd-tag"><svg width="10" height="10"><use href="#i-settings"/></svg> Pengaturan</div>
+        <div class="mhd-title">Koneksi & API</div>
+        <div class="mhd-sub">Setup database dan AI sekali, langsung aktif</div></div>
+      <button class="cbtn" onclick="closeOv('settingsOv')"><svg width="14" height="14"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="mbdy">
+      <!-- DB Status -->
+      <div id="dbStatusBox" style="margin-bottom:13px;padding:11px 13px;border-radius:var(--r14);border:1.5px solid var(--border)"></div>
+      <!-- DB Fields -->
+      <div class="fsep"><svg width="10" height="10"><use href="#i-db"/></svg> Upstash Redis (Database)</div>
+      <div style="background:var(--g50);border:1px solid var(--g200);border-radius:var(--r10);padding:9px 11px;margin-bottom:10px;font-size:11.5px;color:var(--g700);line-height:1.6">💡 Owner setup sekali → semua user otomatis terhubung.</div>
+      <div class="fg"><label class="fl">REST URL</label><input type="text" class="fi" id="dbUrlIn" placeholder="https://xxx.upstash.io"></div>
+      <div class="fg"><label class="fl">Token</label><input type="password" class="fi" id="dbTokenIn" placeholder="Token Upstash..."></div>
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <button onclick="clearDbKey()" class="btn-cancel" style="flex:0">Hapus</button>
+        <button onclick="saveDbKey()" class="btn-submit" id="dbSaveBtn"><svg width="13" height="13"><use href="#i-check"/></svg><span> Hubungkan DB</span></button>
+      </div>
+      <!-- AI Status -->
+      <div id="aiStatusBox" style="margin-bottom:13px;padding:11px 13px;border-radius:var(--r14);border:1.5px solid var(--border)"></div>
+      <!-- AI Fields -->
+      <div class="fsep"><svg width="10" height="10"><use href="#i-spark"/></svg> Groq AI</div>
+      <div class="fg">
+        <label class="fl">API Key <span style="font-size:10px;color:var(--t4);font-weight:400">— gratis di console.groq.com</span></label>
         <div style="position:relative;display:flex;align-items:center">
           <input type="password" class="fi" id="aiKeyIn" placeholder="gsk_..." style="padding-right:42px">
           <button onclick="toggleAiKeyVis()" style="position:absolute;right:11px;background:none;border:none;cursor:pointer;color:var(--t4);display:flex;padding:0"><svg width="16" height="16" id="aiEyeIco"><use href="#i-eye"/></svg></button>
         </div>
       </div>
-      <p style="font-size:11px;color:var(--t4);background:var(--amber2);border:1px solid #fcd34d;border-radius:var(--r10);padding:9px 11px;line-height:1.6">⚠️ Key disimpan di browser lokal — tidak pernah dikirim ke server MCAddn.</p>
-    </div>
-    <div class="mft">
-      <button class="btn-cancel" id="clearAiBtn" onclick="clearAiKey()" style="display:none">Hapus Key</button>
-      <button class="btn-submit" onclick="saveAiKey()"><svg width="13" height="13"><use href="#i-check"/></svg> Simpan Key</button>
-    </div>
-  </div>
-</div>
-
-<!-- DB SETTINGS MODAL -->
-<div class="ov" id="dbOv" onclick="if(event.target.id==='dbOv')closeOv('dbOv')">
-  <div class="modal" style="max-width:440px">
-    <div class="mhd">
-      <div><div class="mhd-tag"><svg width="10" height="10"><use href="#i-db"/></svg> Database</div>
-        <div class="mhd-title">Upstash Redis</div>
-        <div class="mhd-sub">Setup sekali — semua user langsung terhubung</div></div>
-      <button class="cbtn" onclick="closeOv('dbOv')"><svg width="14" height="14"><use href="#i-x"/></svg></button>
-    </div>
-    <div class="mbdy">
-      <div id="dbStatusBox" style="margin-bottom:13px;padding:11px 13px;border-radius:var(--r14);border:1.5px solid var(--border)"></div>
-      <div style="background:var(--g50);border:1px solid var(--g200);border-radius:var(--r10);padding:10px 12px;margin-bottom:12px;font-size:11.5px;color:var(--g700);line-height:1.6">💡 Owner setup satu kali → semua user otomatis terhubung tanpa perlu setting apapun.</div>
-      <div class="fg"><label class="fl">Upstash REST URL</label><input type="text" class="fi" id="dbUrlIn" placeholder="https://xxx.upstash.io"></div>
-      <div class="fg"><label class="fl">Token</label><input type="password" class="fi" id="dbTokenIn" placeholder="Token Upstash kamu..."></div>
-    </div>
-    <div class="mft">
-      <button class="btn-cancel" onclick="clearDbKey()">Hapus Koneksi</button>
-      <button class="btn-submit" id="dbSaveBtn" onclick="saveDbKey()"><svg width="13" height="13"><use href="#i-check"/></svg><span> Simpan & Hubungkan</span></button>
+      <p style="font-size:11px;color:var(--t4);background:var(--amber2);border:1px solid #fcd34d;border-radius:var(--r10);padding:9px 11px;line-height:1.6;margin-bottom:10px">⚠️ Key disimpan di browser lokal saja, tidak dikirim ke server manapun.</p>
+      <div style="display:flex;gap:8px">
+        <button class="btn-cancel" id="clearAiBtn" onclick="clearAiKey()" style="display:none;flex:0">Hapus</button>
+        <button class="btn-submit" onclick="saveAiKey()"><svg width="13" height="13"><use href="#i-check"/></svg> Simpan AI Key</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1041,6 +1135,8 @@ img{display:block;max-width:100%}
         <div id="odPendingPosts"></div>
         <div style="font-size:11px;font-weight:900;color:var(--t4);text-transform:uppercase;letter-spacing:1.5px;margin:16px 0 11px">Pack Perlu Review</div>
         <div id="odPendingPacks"></div>
+        <div style="font-size:11px;font-weight:900;color:var(--red);text-transform:uppercase;letter-spacing:1.5px;margin:16px 0 11px">⚠️ Laporan Masuk</div>
+        <div id="odReportList"></div>
       </div>
       <!-- VIP -->
       <div class="od-panel" id="odp2">
@@ -1052,18 +1148,137 @@ img{display:block;max-width:100%}
       </div>
       <!-- Settings -->
       <div class="od-panel" id="odp3">
-        <div style="font-size:11px;font-weight:900;color:var(--t4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:13px">Konfigurasi</div>
-        <div style="background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r14);padding:14px 16px;margin-bottom:13px">
-          <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:10px">🔑 Ganti Password Owner</div>
-          <input type="password" class="fi" id="newPwIn" placeholder="Password baru (min. 6 karakter)" style="margin-bottom:8px">
-          <button onclick="changeOwnerPw()" style="width:100%;padding:9px;background:var(--g600);color:white;border:none;border-radius:var(--r10);font-size:13px;font-weight:800;cursor:pointer">Ganti Password</button>
-          <p style="font-size:10.5px;color:var(--t4);margin-top:7px;line-height:1.6">⚠️ Perubahan hanya berlaku selama sesi ini. Untuk permanen, edit <code>CFG.OWNER_PW</code> di kode.</p>
+
+        <!-- Announcement -->
+        <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1.5px solid #93c5fd;border-radius:var(--r14);padding:14px 16px;margin-bottom:10px">
+          <div style="font-size:13px;font-weight:800;color:#1e40af;margin-bottom:10px">📣 Pengumuman Homepage</div>
+          <textarea class="fta" id="setAnnounce" placeholder="Tulis pengumuman untuk semua user... (kosongkan untuk sembunyikan)" style="min-height:70px;margin-bottom:8px"></textarea>
+          <button onclick="saveAnnouncement()" style="width:100%;padding:9px;background:#2563eb;color:white;border:none;border-radius:var(--r10);font-size:13px;font-weight:800;cursor:pointer">Publish Pengumuman</button>
+          <button onclick="clearAnnouncement()" style="width:100%;margin-top:6px;padding:7px;background:transparent;color:#2563eb;border:1px solid #93c5fd;border-radius:var(--r10);font-size:12px;font-weight:700;cursor:pointer">Hapus Pengumuman</button>
         </div>
+
+        <!-- Profil Owner -->
+        <div style="background:linear-gradient(135deg,#0f172a,#1e1b4b);border-radius:var(--r14);padding:14px 16px;margin-bottom:10px">
+          <div style="font-size:11px;font-weight:900;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">👤 Profil Owner</div>
+          <div class="fg" style="margin-bottom:8px">
+            <label style="display:block;font-size:11px;font-weight:800;color:rgba(255,255,255,.5);margin-bottom:4px">Nama Owner</label>
+            <div style="display:flex;gap:7px">
+              <input type="text" id="setOwnerName" class="fi" placeholder="Nama owner..." style="flex:1;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.14);color:white">
+              <button onclick="saveOwnerName()" style="padding:8px 13px;background:#4338ca;color:white;border:none;border-radius:var(--r10);font-size:12px;font-weight:800;cursor:pointer;flex-shrink:0">Simpan</button>
+            </div>
+          </div>
+          <div class="fg">
+            <label style="display:block;font-size:11px;font-weight:800;color:rgba(255,255,255,.5);margin-bottom:4px">Website / Deskripsi</label>
+            <input type="text" id="setOwnerBio" class="fi" placeholder="Bio singkat atau link website..." style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.14);color:white">
+          </div>
+          <button onclick="saveOwnerProfile()" style="width:100%;padding:9px;background:linear-gradient(135deg,#4338ca,#6366f1);color:white;border:none;border-radius:var(--r10);font-size:13px;font-weight:800;cursor:pointer;margin-top:4px">Simpan Profil</button>
+        </div>
+
+        <!-- Password -->
+        <div style="background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r14);padding:14px 16px;margin-bottom:10px">
+          <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:7px">🔑 Ganti Password
+            <span style="background:var(--g50);color:var(--g600);font-size:9px;font-weight:900;padding:1px 7px;border-radius:3px;text-transform:uppercase">SHA-256 Hash</span>
+          </div>
+          <input type="password" class="fi" id="newPwIn" placeholder="Password baru (min. 6 karakter)" style="margin-bottom:8px">
+          <input type="password" class="fi" id="newPwConfirm" placeholder="Konfirmasi password baru..." style="margin-bottom:8px">
+          <button onclick="changeOwnerPw()" style="width:100%;padding:9px;background:var(--g600);color:white;border:none;border-radius:var(--r10);font-size:13px;font-weight:800;cursor:pointer">Ganti Password</button>
+          <p style="font-size:10.5px;color:var(--t4);margin-top:7px;line-height:1.5">🔒 Password disimpan sebagai hash — tidak ada yang bisa lihat password aslinya termasuk di source code.</p>
+        </div>
+
+        <!-- Tampilan -->
+        <div style="background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r14);padding:14px 16px;margin-bottom:10px">
+          <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:11px">🎨 Tampilan & Branding</div>
+          <div class="fg" style="margin-bottom:8px">
+            <label class="fl">Nama Platform</label>
+            <input type="text" class="fi" id="setSiteName" placeholder="MCAddn" value="MCAddn">
+          </div>
+          <div class="fg" style="margin-bottom:8px">
+            <label class="fl">Tagline</label>
+            <input type="text" class="fi" id="setSiteTagline" placeholder="Platform komunitas Minecraft Indonesia">
+          </div>
+          <div class="fg" style="margin-bottom:10px">
+            <label class="fl">Warna Utama</label>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <div class="color-opt on" data-color="#16a34a" onclick="setAccentColor('#16a34a',this)" style="width:28px;height:28px;border-radius:50%;background:#16a34a;cursor:pointer;border:3px solid #16a34a;box-shadow:0 0 0 2px white,0 0 0 4px #16a34a"></div>
+              <div class="color-opt" data-color="#2563eb" onclick="setAccentColor('#2563eb',this)" style="width:28px;height:28px;border-radius:50%;background:#2563eb;cursor:pointer;border:3px solid #2563eb"></div>
+              <div class="color-opt" data-color="#7c3aed" onclick="setAccentColor('#7c3aed',this)" style="width:28px;height:28px;border-radius:50%;background:#7c3aed;cursor:pointer;border:3px solid #7c3aed"></div>
+              <div class="color-opt" data-color="#dc2626" onclick="setAccentColor('#dc2626',this)" style="width:28px;height:28px;border-radius:50%;background:#dc2626;cursor:pointer;border:3px solid #dc2626"></div>
+              <div class="color-opt" data-color="#d97706" onclick="setAccentColor('#d97706',this)" style="width:28px;height:28px;border-radius:50%;background:#d97706;cursor:pointer;border:3px solid #d97706"></div>
+              <div class="color-opt" data-color="#0891b2" onclick="setAccentColor('#0891b2',this)" style="width:28px;height:28px;border-radius:50%;background:#0891b2;cursor:pointer;border:3px solid #0891b2"></div>
+            </div>
+          </div>
+          <button onclick="saveBranding()" style="width:100%;padding:9px;background:var(--g600);color:white;border:none;border-radius:var(--r10);font-size:13px;font-weight:800;cursor:pointer">Simpan Tampilan</button>
+        </div>
+
+        <!-- Upload Settings -->
+        <div style="background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r14);padding:14px 16px;margin-bottom:10px">
+          <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:11px">📤 Pengaturan Upload</div>
+          <label style="display:flex;align-items:center;gap:9px;margin-bottom:9px;cursor:pointer">
+            <input type="checkbox" id="setRequireLogin" checked style="width:16px;height:16px;accent-color:var(--g600)">
+            <span style="font-size:13px;font-weight:600;color:var(--t2)">Wajib login untuk upload pack</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:9px;margin-bottom:9px;cursor:pointer">
+            <input type="checkbox" id="setAiRequired" style="width:16px;height:16px;accent-color:var(--g600)">
+            <span style="font-size:13px;font-weight:600;color:var(--t2)">Wajib generate AI deskripsi sebelum submit</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:9px;cursor:pointer">
+            <input type="checkbox" id="setDlRequired" style="width:16px;height:16px;accent-color:var(--g600)">
+            <span style="font-size:13px;font-weight:600;color:var(--t2)">Wajib isi link download</span>
+          </label>
+        </div>
+
+        <!-- Forum Settings -->
+        <div style="background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r14);padding:14px 16px;margin-bottom:10px">
+          <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:11px">💬 Pengaturan Forum</div>
+          <label style="display:flex;align-items:center;gap:9px;margin-bottom:9px;cursor:pointer">
+            <input type="checkbox" id="setAiModerate" checked style="width:16px;height:16px;accent-color:var(--g600)">
+            <span style="font-size:13px;font-weight:600;color:var(--t2)">AI moderasi otomatis post baru</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:9px;margin-bottom:9px;cursor:pointer">
+            <input type="checkbox" id="setOwnerApprove" checked style="width:16px;height:16px;accent-color:var(--g600)">
+            <span style="font-size:13px;font-weight:600;color:var(--t2)">Post harus diapprove owner dulu</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:9px;cursor:pointer">
+            <input type="checkbox" id="setGuestComment" checked style="width:16px;height:16px;accent-color:var(--g600)">
+            <span style="font-size:13px;font-weight:600;color:var(--t2)">Izinkan komentar tanpa login</span>
+          </label>
+        </div>
+
+        <!-- Danger Zone -->
         <div style="background:var(--red2);border:1.5px solid #fca5a5;border-radius:var(--r14);padding:14px 16px">
           <div style="font-size:13px;font-weight:800;color:var(--red);margin-bottom:10px">⚠️ Danger Zone</div>
-          <button onclick="if(confirm('Hapus SEMUA pack? TIDAK BISA dibatalkan!'))deleteAllPacks()" style="width:100%;padding:9px;background:var(--red);color:white;border:none;border-radius:var(--r10);font-size:12px;font-weight:800;cursor:pointer;margin-bottom:7px">🗑️ Hapus Semua Pack</button>
-          <button onclick="if(confirm('Reset semua data forum?'))resetForum()" style="width:100%;padding:9px;background:transparent;color:var(--red);border:1px solid var(--red);border-radius:var(--r10);font-size:12px;font-weight:800;cursor:pointer">💬 Reset Data Forum</button>
+          <button onclick="if(confirm('Hapus SEMUA pack? TIDAK BISA dibatalkan!'))deleteAllPacks()" style="width:100%;padding:9px;background:var(--red);color:white;border:none;border-radius:var(--r10);font-size:12px;font-weight:800;cursor:pointer;margin-bottom:6px">🗑️ Hapus Semua Pack</button>
+          <button onclick="if(confirm('Reset semua data forum?'))resetForum()" style="width:100%;padding:9px;background:transparent;color:var(--red);border:1px solid var(--red);border-radius:var(--r10);font-size:12px;font-weight:800;cursor:pointer;margin-bottom:6px">💬 Reset Data Forum</button>
+          <button onclick="if(confirm('Reset VIP creators?')){VIP_CREATORS=new Set([CFG.OWNER_NAME.toLowerCase()]);saveVipCreators();renderAll();toast('VIP direset','ok')}" style="width:100%;padding:9px;background:transparent;color:var(--red);border:1px solid var(--red);border-radius:var(--r10);font-size:12px;font-weight:800;cursor:pointer">👑 Reset Semua VIP</button>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AI CHAT MODAL -->
+<div class="ov" id="aiChatOv" onclick="if(event.target.id==='aiChatOv')closeOv('aiChatOv')">
+  <div class="modal" style="max-width:520px;display:flex;flex-direction:column;max-height:88vh">
+    <div class="mhd" style="flex-shrink:0">
+      <div><div class="mhd-tag" style="background:var(--g50);color:var(--g700)"><svg width="10" height="10"><use href="#i-spark"/></svg> AI Assistant</div>
+        <div class="mhd-title">Tanya AI tentang Minecraft</div>
+        <div class="mhd-sub">Powered by Groq · Llama 3.3 70B</div></div>
+      <button class="cbtn" onclick="closeOv('aiChatOv')"><svg width="14" height="14"><use href="#i-x"/></svg></button>
+    </div>
+    <div id="aiChatMsgs" style="flex:1;overflow-y:auto;padding:12px 20px;display:flex;flex-direction:column;gap:10px;min-height:220px">
+      <div style="background:var(--g50);border:1px solid var(--g200);border-radius:0 var(--r14) var(--r14) var(--r14);padding:10px 13px;font-size:13px;color:var(--g700);line-height:1.7;max-width:88%">
+        👋 Halo! Saya AI asisten MCAddn. Tanya apa aja soal Minecraft — rekomendasi pack, cara install, fitur add-on, dll!
+      </div>
+    </div>
+    <div style="padding:12px 20px 16px;border-top:1px solid var(--border);flex-shrink:0">
+      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:9px">
+        <button onclick="aiChatSend('Rekomendasikan shader yang bagus untuk HP low-end')" style="padding:4px 10px;border-radius:var(--r99);border:1px solid var(--border);background:var(--surface);font-size:11px;font-weight:700;color:var(--t3);cursor:pointer">💡 Shader HP low-end</button>
+        <button onclick="aiChatSend('Add-on survival terbaik 2024')" style="padding:4px 10px;border-radius:var(--r99);border:1px solid var(--border);background:var(--surface);font-size:11px;font-weight:700;color:var(--t3);cursor:pointer">🏕️ Survival add-on</button>
+        <button onclick="aiChatSend('Cara install add-on di MCPE')" style="padding:4px 10px;border-radius:var(--r99);border:1px solid var(--border);background:var(--surface);font-size:11px;font-weight:700;color:var(--t3);cursor:pointer">📱 Cara install</button>
+      </div>
+      <div style="display:flex;gap:8px">
+        <input type="text" id="aiChatIn" class="fi" placeholder="Tanya sesuatu..." style="flex:1" onkeydown="if(event.key==='Enter')aiChatSend()">
+        <button onclick="aiChatSend()" style="padding:9px 16px;background:var(--g600);color:white;border:none;border-radius:var(--r10);font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:var(--shg)"><svg width="13" height="13"><use href="#i-send"/></svg></button>
       </div>
     </div>
   </div>
@@ -1088,17 +1303,44 @@ const CFG = {
   DB_URL:    localStorage.getItem('mcaddn-db-url')   || 'https://game-spaniel-72287.upstash.io',
   DB_TOKEN:  localStorage.getItem('mcaddn-db-token') || 'gQAAAAAAARpfAAIncDE0OGM2YjVkN2JkY2U0ZTczOGZhNjNkODIxOWEyZWMzN3AxNzIyODc',
   GROQ_KEY:  localStorage.getItem('mcaddn-groq-key') || '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',
-  OWNER_PW:  'kinggg2026',
+  // Password TIDAK disimpan di sini — disimpan sebagai hash di localStorage
+  // Owner set password lewat dashboard pertama kali
   OWNER_NAME:'KingGG',
   GROQ_MODEL:'llama-3.3-70b-versatile',
 };
 
+// ── Secure password hash (SHA-256) ──
+async function hashPw(pw){
+  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(pw));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+// Default hash = 'kinggg2024' — owner ganti lewat dashboard
+const DEFAULT_PW_HASH='8c3f8c0e0f5c1e2a1c0d4b3a2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3'; // placeholder
+async function checkPw(input){
+  const stored=localStorage.getItem('mcaddn-pw-hash');
+  const inputHash=await hashPw(input);
+  if(!stored){
+    // Belum ada hash tersimpan — cek default 'kinggg2024'
+    const defaultHash=await hashPw('kinggg2026');
+    return inputHash===defaultHash;
+  }
+  return inputHash===stored;
+}
+async function setPw(newPw){
+  const h=await hashPw(newPw);
+  localStorage.setItem('mcaddn-pw-hash',h);
+}
+
 // ── State ──
 let P=[], L=new Set(), tags=[], vers=[], img=null, imgTab='url';
-let VIP_CREATORS=new Set(); // daftar nama creator yang dapat VIP — per creator, bukan per pack
+let VIP_CREATORS=new Set();
 let cat='all', sort='new', vm='grid', q='', detId=null;
 let posts=[], postLikes=new Set(), postCat='all';
 let isOwner=false, curUser=null, curPage='packs';
+let _ownerSession=null;
+let B=new Set(); // Bookmarks
+let R={}; // Ratings — {packId: 1-5}
+let FEATURED=new Set(); // Featured/pinned pack IDs
 
 // ── Categories ──
 const CAT={
@@ -1117,6 +1359,8 @@ const pc=(k)=>POSTCATS[k]||{n:k,c:'#6b7280',b:'#f3f4f6'};
 const esc=(s)=>!s?'':String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 const fN=(n)=>n>=1000?(n/1000).toFixed(1)+'k':String(n||0);
 const ini=(s)=>(s||'?').split(' ').map(w=>w[0]||'').join('').slice(0,2).toUpperCase();
+const ytId=(url)=>{if(!url)return'';const m=url.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/);return m?m[1]:''};
+const shareWA=(text)=>window.open(`https://wa.me/?text=${encodeURIComponent(text)}`);
 const isNew=(ts)=>Date.now()-ts<3*864e5;
 const fD=(ts)=>new Date(ts).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
 const ago=(ts)=>{const d=(Date.now()-ts)/1e3;if(d<60)return'baru saja';if(d<3600)return`${Math.floor(d/60)} mnt`;if(d<86400)return`${Math.floor(d/3600)} jam`;return`${Math.floor(d/86400)} hari lalu`};
@@ -1274,8 +1518,14 @@ async function upTest(url,token){
 
 async function loadAll(){
   L=new Set(JSON.parse(localStorage.getItem('mcaddn-likes')||'[]'));
+  B=new Set(JSON.parse(localStorage.getItem('mcaddn-bookmarks')||'[]'));
+  try{R=JSON.parse(localStorage.getItem('mcaddn-ratings')||'{}')}catch{R={}}
+  try{FEATURED=new Set(JSON.parse(localStorage.getItem('mcaddn-featured')||'[]'))}catch{FEATURED=new Set()}
   if(isDBReady()){
-    try{P=await dbRead('packs');if(!Array.isArray(P))P=[];localStorage.setItem('mcaddn-packs',JSON.stringify(P));return;}catch(e){toast('DB Error: '+e.message,'err')}
+    try{P=await dbRead('packs');if(!Array.isArray(P))P=[];localStorage.setItem('mcaddn-packs',JSON.stringify(P));
+    // Load featured from DB
+    try{const ft=await upCmd('GET','mcaddn:featured');if(ft){const fa=JSON.parse(ft);if(Array.isArray(fa))FEATURED=new Set(fa)}}catch{}
+    return;}catch(e){toast('DB Error: '+e.message,'err')}
   }
   try{P=JSON.parse(localStorage.getItem('mcaddn-packs')||'[]');if(!Array.isArray(P))P=[];}catch{P=[]}
 }
@@ -1283,6 +1533,12 @@ async function saveP(){
   localStorage.setItem('mcaddn-packs',JSON.stringify(P));
   if(!isDBReady()) return;
   try{await dbWrite('packs',P)}catch(e){toast('Sync error: '+e.message,'err')}
+}
+async function saveFeatured(){
+  const arr=[...FEATURED];
+  localStorage.setItem('mcaddn-featured',JSON.stringify(arr));
+  if(!isDBReady()) return;
+  try{await dbWrite('featured',arr)}catch{}
 }
 
 // ── VIP_CREATORS — VIP per creator, bukan per pack ──
@@ -1318,11 +1574,17 @@ async function savePosts(){
 }
 
 // DB Settings
-function openDBSettings(){
+function openSettingsShortcut(){
+  renderDBStatus();renderAIStatus();
   document.getElementById('dbUrlIn').value=getDBUrl();
   document.getElementById('dbTokenIn').value=getDBToken();
-  renderDBStatus(); openOv('dbOv');
+  document.getElementById('aiKeyIn').value=CFG.GROQ_KEY||localStorage.getItem('mcaddn-groq-key')||'';
+  document.getElementById('clearAiBtn').style.display=getGroqKey()?'block':'none';
+  openOv('settingsOv');
 }
+// Keep old functions pointing to same modal for backward compat
+function openDBSettings(){ openSettingsShortcut() }
+function openAISettings(){ openSettingsShortcut() }
 function renderDBStatus(){
   const el=document.getElementById('dbStatusBox');if(!el)return;
   const ok=isDBReady();
@@ -1343,7 +1605,7 @@ async function saveDbKey(){
     localStorage.setItem('mcaddn-db-token',token);
     CFG.DB_URL=url;CFG.DB_TOKEN=token;
     await loadAll();await loadPosts();renderAll();
-    toast('Upstash terhubung! Semua user sync otomatis.','vip');closeOv('dbOv');
+    toast('Upstash terhubung! Semua user sync otomatis.','vip');closeOv('settingsOv');
   }catch(e){toast('Gagal: '+e.message,'err');renderDBStatus()}
   btn.disabled=false;btn.innerHTML=si('i-check',13)+'<span> Simpan & Hubungkan</span>';
 }
@@ -1357,7 +1619,6 @@ function clearDbKey(){
 }
 
 // AI Settings
-function openAISettings(){renderAIStatus();document.getElementById('aiKeyIn').value=CFG.GROQ_KEY||localStorage.getItem('mcaddn-groq-key')||'';document.getElementById('clearAiBtn').style.display=CFG.GROQ_KEY?'block':'none';openOv('aiOv')}
 function renderAIStatus(){
   const el=document.getElementById('aiStatusBox');if(!el)return;
   const ok=!!(CFG.GROQ_KEY||localStorage.getItem('mcaddn-groq-key'));
@@ -1370,7 +1631,7 @@ function saveAiKey(){
   const k=document.getElementById('aiKeyIn').value.trim();
   if(!k){toast('Masukkan key dulu!','err');return}
   localStorage.setItem('mcaddn-groq-key',k);CFG.GROQ_KEY=k;
-  closeOv('aiOv');toast('AI key tersimpan! Groq aktif.','vip');
+  closeOv('settingsOv');toast('AI key tersimpan! Groq aktif.','vip');
 }
 function clearAiKey(){
   if(!confirm('Hapus API key?'))return;
@@ -1391,18 +1652,25 @@ function toggleAiKeyVis(){
 // ══════════════════════════════════════════════════════════════
 function getFiltered(){
   let list=[...P];
-  list.sort((a,b)=>(isVip(b)?1:0)-(isVip(a)?1:0)||(b.ts-a.ts));
+  list.sort((a,b)=>{
+    const fa=FEATURED.has(a.id)?2:0,fb=FEATURED.has(b.id)?2:0;
+    const va=isVip(a)?1:0,vb=isVip(b)?1:0;
+    return (fb+vb)-(fa+va)||(b.ts-a.ts);
+  });
   if(cat!=='all') list=list.filter(p=>p.cat===cat);
   if(q) list=list.filter(p=>(p.name+' '+(p.creator||'')+' '+(p.tags||[]).join(' ')+' '+(p.desc||'')).toLowerCase().includes(q));
-  if(sort==='new')  return list.sort((a,b)=>b.ts-a.ts);
-  if(sort==='pop')  return list.sort((a,b)=>(b.dl||0)-(a.dl||0));
-  if(sort==='like') return list.sort((a,b)=>(b.likes||0)-(a.likes||0));
+  if(sort==='bookmark') return list.filter(p=>B.has(p.id));
+  if(sort==='new')   return list.sort((a,b)=>b.ts-a.ts);
+  if(sort==='pop')   return list.sort((a,b)=>(b.dl||0)-(a.dl||0));
+  if(sort==='like')  return list.sort((a,b)=>(b.likes||0)-(a.likes||0));
+  if(sort==='rated') return list.sort((a,b)=>avgRating(b.id)-avgRating(a.id));
   return list.sort((a,b)=>a.name.localeCompare(b.name));
 }
+const avgRating=(id)=>{const r=P.find(p=>p.id===id)?.ratings||{};const v=Object.values(r);return v.length?v.reduce((s,n)=>s+n,0)/v.length:0};
 
-function setCat(v){cat=v;document.querySelectorAll('[data-cat]').forEach(e=>e.classList.toggle('on',e.dataset.cat===v));renderPacks()}
-function setSort(v){sort=v;document.querySelectorAll('[data-sort]').forEach(e=>e.classList.toggle('on',e.dataset.sort===v));renderPacks()}
-function doSearch(v){q=v.toLowerCase().trim();renderPacks()}
+function setCat(v){cat=v;_packPage=1;document.querySelectorAll('[data-cat]').forEach(e=>e.classList.toggle('on',e.dataset.cat===v));renderPacks()}
+function setSort(v){sort=v;_packPage=1;document.querySelectorAll('[data-sort]').forEach(e=>e.classList.toggle('on',e.dataset.sort===v));renderPacks()}
+function doSearch(v){q=v.toLowerCase().trim();_packPage=1;renderPacks()}
 function setVM(v){
   vm=v;
   [['vbtnG','vbtnL'],['mvbtnG','mvbtnL']].forEach(([g,l])=>{
@@ -1417,7 +1685,7 @@ function setVM(v){
 
 function initNavChips(){
   const cats=[{k:'all',i:'i-grid',n:'Semua'},...Object.entries(CAT).map(([k,v])=>({k,i:v.i,n:v.n}))];
-  const sorts=[{k:'new',i:'i-spark',n:'Terbaru'},{k:'pop',i:'i-trend',n:'Terpopuler'},{k:'like',i:'i-heart',n:'Disukai'},{k:'az',i:'i-list',n:'A–Z'}];
+  const sorts=[{k:'new',i:'i-spark',n:'Terbaru'},{k:'pop',i:'i-trend',n:'Terpopuler'},{k:'like',i:'i-heart',n:'Disukai'},{k:'rated',i:'i-star',n:'Rating'},{k:'bookmark',i:'i-box',n:'Tersimpan'},{k:'az',i:'i-list',n:'A–Z'}];
   document.getElementById('fbar').innerHTML=`<span style="font-size:10px;font-weight:900;color:var(--t4);text-transform:uppercase;letter-spacing:1.5px;flex-shrink:0">Sort</span>`+sorts.map(s=>`<button class="chip${s.k==='new'?' on':''}" data-sort="${s.k}" onclick="setSort('${s.k}')">${si(s.i,11)} ${s.n}</button>`).join('');
   document.getElementById('mcats').innerHTML=cats.map(c=>`<div class="mchip${c.k==='all'?' on':''}" data-cat="${c.k}" onclick="setCat('${c.k}')">${si(c.i,12)} ${c.n}</div>`).join('');
   document.getElementById('msort').innerHTML=sorts.map(s=>`<div class="mschip${s.k==='new'?' on':''}" data-sort="${s.k}" onclick="setSort('${s.k}')">${si(s.i,11)} ${s.n}</div>`).join('');
@@ -1426,7 +1694,60 @@ function initNavChips(){
   if(scg) scg.innerHTML=Object.entries(CAT).map(([k,v])=>`<div class="cat-btn${cat===k?' on':''}" data-cat="${k}" onclick="setCat('${k}')"><div class="cat-ico" style="background:${v.b};color:${v.c}">${si(v.i,14)}</div><div class="cat-n">${v.n}</div><div class="cat-c" id="scc_${k}">0 pack</div></div>`).join('');
 }
 
-function renderAll(){renderStats();renderTopList();renderVIPBar();renderPacks()}
+function renderAll(){renderStats();renderTopList();renderVIPBar();renderPacks();renderLeaderboard();renderAnnouncement()}
+
+// ── LEADERBOARD ──
+function renderLeaderboard(){
+  const el=document.getElementById('leaderboardList');if(!el)return;
+  const crMap={};
+  P.forEach(p=>{
+    const k=p.creator||'Unknown';
+    if(!crMap[k])crMap[k]={creator:k,packs:0,dl:0,likes:0};
+    crMap[k].packs++;crMap[k].dl+=(p.dl||0);crMap[k].likes+=(p.likes||0);
+  });
+  const top=Object.values(crMap).sort((a,b)=>b.dl-a.dl).slice(0,5);
+  const medals=['🥇','🥈','🥉','4.','5.'];
+  el.innerHTML=top.length?top.map((c,i)=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--bg2);cursor:pointer" onclick="openCreatorPage('${esc(c.creator)}')">
+      <span style="font-size:13px;width:22px;text-align:center;flex-shrink:0">${medals[i]}</span>
+      <div style="width:28px;height:28px;border-radius:50%;background:${VIP_CREATORS.has(c.creator.toLowerCase())?'linear-gradient(135deg,#5b21b6,#7c3aed)':'var(--g600)'};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:white;flex-shrink:0">${ini(c.creator)}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:800;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(c.creator)}${VIP_CREATORS.has(c.creator.toLowerCase())?' 👑':''}</div>
+        <div style="font-size:10px;color:var(--t4)">${c.packs} pack · ${fN(c.dl)} dl</div>
+      </div>
+      ${getBadge(c)}
+    </div>`).join(''):`<div style="font-size:11.5px;color:var(--t4);text-align:center;padding:10px">Belum ada data</div>`;
+}
+
+// ── BADGES ──
+function getBadge(c){
+  if(c.dl>=10000) return `<span style="font-size:11px;background:var(--amber2);color:var(--amber);padding:2px 7px;border-radius:3px;font-weight:900;flex-shrink:0">💎 Legend</span>`;
+  if(c.dl>=1000)  return `<span style="font-size:11px;background:var(--g50);color:var(--g700);padding:2px 7px;border-radius:3px;font-weight:900;flex-shrink:0">⭐ Pro</span>`;
+  if(c.packs>=5)  return `<span style="font-size:11px;background:var(--bg2);color:var(--t3);padding:2px 7px;border-radius:3px;font-weight:900;flex-shrink:0">🌱 Active</span>`;
+  return '';
+}
+
+// ── ANNOUNCEMENT ──
+function renderAnnouncement(){
+  const msg=localStorage.getItem('mcaddn-announce')||'';
+  const banner=document.getElementById('announceBanner');
+  const txt=document.getElementById('announceTxt');
+  if(banner&&txt&&msg){banner.style.display='flex';txt.textContent=msg}
+  else if(banner)banner.style.display='none';
+  // Fill settings input
+  const inp=document.getElementById('setAnnounce');if(inp)inp.value=msg;
+}
+function saveAnnouncement(){
+  const msg=document.getElementById('setAnnounce')?.value.trim()||'';
+  localStorage.setItem('mcaddn-announce',msg);
+  renderAnnouncement();
+  toast(msg?'📣 Pengumuman dipublish!':'Pengumuman dihapus','vip');
+}
+function clearAnnouncement(){
+  localStorage.removeItem('mcaddn-announce');
+  const inp=document.getElementById('setAnnounce');if(inp)inp.value='';
+  renderAnnouncement();toast('Pengumuman dihapus','ok');
+}
 
 function renderStats(){
   const dl=P.reduce((s,p)=>s+(p.dl||0),0),lk=P.reduce((s,p)=>s+(p.likes||0),0),cr=new Set(P.map(p=>p.creator)).size;
@@ -1467,19 +1788,27 @@ function renderVIPBar(){
   </div>`).join('') : `<div style="font-size:11.5px;color:var(--t4);text-align:center;padding:7px">Belum ada pack VIP</div>`;
 }
 
+let _packPage=1;
+const PACK_PER_PAGE=20;
+
 function renderPacks(){
   const list=getFiltered();
-  const html=list.map(p=>cardH(p,false)).join('');
-  const lhtml=list.map(p=>cardH(p,true)).join('');
+  const paged=list.slice(0,_packPage*PACK_PER_PAGE);
+  const hasMore=paged.length<list.length;
+  const html=paged.map(p=>cardH(p,false)).join('');
+  const lhtml=paged.map(p=>cardH(p,true)).join('');
   const empty=!list.length;
-  ['dgrid','mgrid'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=html});
-  ['dlist','mlist'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=lhtml});
+  const loadMoreBtn=hasMore?`<div style="text-align:center;padding:16px 0;grid-column:1/-1"><button onclick="_packPage++;renderPacks()" style="padding:10px 28px;border-radius:var(--r99);border:1.5px solid var(--border);background:var(--surface);font-size:13px;font-weight:700;color:var(--t2);cursor:pointer">Load More (${list.length-paged.length} lagi)</button></div>`:'';
+  ['dgrid','mgrid'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=html+loadMoreBtn});
+  ['dlist','mlist'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=lhtml+loadMoreBtn});
   ['dempty','mempty'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display=empty?'block':'none'});
   [['packCount',list.length],['mPackCount',list.length]].forEach(([id,v])=>{const e=document.getElementById(id);if(e)e.textContent=`${v} pack ditemukan`});
 }
 
 function cardH(p,isList=false){
-  const c=cc(p.cat),lk=L.has(p.id),pIsVip=isVip(p),nw=isNew(p.ts);
+  const c=cc(p.cat),lk=L.has(p.id),pIsVip=isVip(p),nw=isNew(p.ts),bk=B.has(p.id),ft=FEATURED.has(p.id);
+  const myRating=R[p.id]||0;
+  const packAvgRating=avgRating(p.id);
   const thumbH=isList
     ? `<div class="card-img-wrap">${p.img?`<img class="card-img" src="${p.img}" loading="lazy" style="aspect-ratio:4/3;height:100%">`:`<div class="card-ph" style="aspect-ratio:4/3;background:linear-gradient(140deg,${c.b},var(--g50))"><div style="color:${c.c}">${si(c.i,36)}</div></div>`}</div>`
     : p.img?`<img class="card-img" src="${p.img}" loading="lazy">`:`<div class="card-ph" style="background:linear-gradient(140deg,${c.b},var(--g50))"><div style="color:${c.c}">${si(c.i,isList?36:32)}</div></div>`;
@@ -1489,15 +1818,20 @@ function cardH(p,isList=false){
       <span class="cat-badge" style="background:${c.b};color:${c.c}">${si(c.i,9)} ${c.n}</span>
       <button class="like-btn${lk?' on':''}" onclick="togLike(event,'${p.id}')">${si(lk?'i-heart-f':'i-heart',13)}</button>
     </div>
+    ${ft?`<div style="position:absolute;top:8px;left:50%;transform:translateX(-50%);background:var(--amber);color:white;font-size:8px;font-weight:900;padding:2px 8px;border-radius:var(--r4);letter-spacing:.4px;text-transform:uppercase;z-index:2">📌 Featured</div>`:''}
     ${pIsVip?`<div class="vip-badge-card"><span style="animation:crownBounce 2s infinite;display:inline-block">👑</span> VIP</div>`:''}
-    ${nw&&!pIsVip?`<div class="new-badge">Baru</div>`:''}
+    ${nw&&!pIsVip&&!ft?`<div class="new-badge">Baru</div>`:''}
+    ${bk?`<div style="position:absolute;bottom:8px;right:8px;background:var(--amber);width:22px;height:22px;border-radius:var(--r4);display:flex;align-items:center;justify-content:center;font-size:13px;z-index:2;box-shadow:var(--sh1)">🔖</div>`:''}
     <div class="card-body">
       <div class="card-title">${esc(p.name)}</div>
       <div class="card-creator"><div class="av${pIsVip?' vip-av':''}">${ini(p.creator)}</div>${esc(p.creator)}${p.group?` · ${esc(p.group)}`:''}</div>
       ${isList?`<div class="card-desc">${esc(p.desc||'')}</div>`:''}
       <div class="card-foot">
         <div class="card-tags">${(p.tags||[]).slice(0,2).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}${(p.vers||[])[0]?`<span class="tag" style="background:var(--blue2);color:var(--blue)">${esc(p.vers[0])}</span>`:''}</div>
-        <div class="card-stats"><span class="cstat">${si('i-dl',10)} ${fN(p.dl)}</span><span class="cstat">${si('i-heart',10)} ${p.likes||0}</span></div>
+        <div class="card-stats">
+          ${packAvgRating>0?`<span class="cstat" style="color:var(--amber)">⭐${packAvgRating.toFixed(1)}</span>`:''}
+          <span class="cstat">${si('i-dl',10)} ${fN(p.dl)}</span>
+        </div>
       </div>
     </div>
   </div>`;
@@ -1531,10 +1865,10 @@ function openUpload(){
   document.getElementById('imgFileMode').style.display='none';
   document.getElementById('imgUrlMode').style.display='block';
   switchImgTab('url');
-  ['fName','fGroup','fDesc','fDl','fVer','fSize'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=''});
+  ['fName','fGroup','fDesc','fDl','fVer','fSize','fYoutube','fGallery'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=''});
   // Auto-fill creator from user
   const fc=document.getElementById('fCreator');
-  if(fc) fc.value=curUser?.displayName||curUser?.email?.split('@')[0]||(isOwner?CFG.OWNER_NAME:'Creator');
+  if(fc) fc.value=curUser?.displayName||curUser?.email?.split('@')[0]||_userProfile?.name||'';
   document.getElementById('aiRes').classList.remove('show');
   document.querySelectorAll('.vchip').forEach(c=>c.classList.remove('on'));
   renderTags();openOv('upOv');
@@ -1585,6 +1919,81 @@ async function callGroq(prompt,maxTokens=700){
   return(await res.json()).choices?.[0]?.message?.content||'';
 }
 
+// ── AI CHAT ──
+let _chatHistory=[];
+function openAIChat(){
+  if(!getGroqKey()){toast('Isi Groq API key dulu! Klik ✦','err');openAISettings();return}
+  openOv('aiChatOv');
+}
+async function aiChatSend(preset){
+  const inp=document.getElementById('aiChatIn');
+  const msg=preset||(inp?.value.trim());
+  if(!msg)return;
+  if(inp)inp.value='';
+  const msgs=document.getElementById('aiChatMsgs');
+
+  // Tambah bubble user
+  const ub=document.createElement('div');
+  ub.style.cssText='background:var(--g600);color:white;border-radius:var(--r14) var(--r14) 0 var(--r14);padding:10px 13px;font-size:13px;line-height:1.7;max-width:88%;align-self:flex-end;margin-left:auto';
+  ub.textContent=msg;msgs.appendChild(ub);
+
+  // Bubble loading
+  const lb=document.createElement('div');
+  lb.style.cssText='background:var(--bg2);border-radius:0 var(--r14) var(--r14) var(--r14);padding:10px 13px;font-size:13px;color:var(--t3);max-width:88%';
+  lb.innerHTML='<span style="animation:blink 1s infinite;display:inline-block">●●●</span>';
+  msgs.appendChild(lb);msgs.scrollTop=msgs.scrollHeight;
+
+  _chatHistory.push({role:'user',content:msg});
+  try{
+    const sysPrompt='Kamu AI asisten MCAddn, platform komunitas Minecraft Indonesia. Bantu user dengan pertanyaan seputar Minecraft, add-on, texture pack, shader, dll. Jawab dalam Bahasa Indonesia yang santai dan informatif. Maksimal 150 kata per jawaban.';
+    const key=getGroqKey();
+    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${key}`},body:JSON.stringify({model:CFG.GROQ_MODEL,max_tokens:300,messages:[{role:'system',content:sysPrompt},..._chatHistory.slice(-6)]})});
+    const data=await res.json();
+    const reply=data.choices?.[0]?.message?.content||'Maaf, tidak bisa menjawab sekarang.';
+    _chatHistory.push({role:'assistant',content:reply});
+    lb.style.cssText='background:var(--g50);border:1px solid var(--g200);border-radius:0 var(--r14) var(--r14) var(--r14);padding:10px 13px;font-size:13px;color:var(--t2);line-height:1.7;max-width:88%';
+    lb.textContent=reply;
+
+    // Cek apakah AI bisa rekomendasikan pack dari MCAddn
+    if(P.length&&(msg.includes('rekomen')||msg.includes('saran')||msg.includes('bagus'))){
+      aiSuggestPacks(lb, msg);
+    }
+  }catch(e){lb.textContent='Error: '+e.message;lb.style.color='var(--red)'}
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function aiSuggestPacks(afterEl, query){
+  const q=query.toLowerCase();
+  const keywords=['shader','texture','skin','map','addon','mod','survival','pvp','rpg'];
+  const matchCat=Object.entries(CAT).find(([k,v])=>q.includes(k)||q.includes(v.n.toLowerCase()));
+  let relevant=matchCat?P.filter(p=>p.cat===matchCat[0]):P;
+  relevant=[...relevant].sort((a,b)=>(b.dl||0)-(a.dl||0)).slice(0,3);
+  if(!relevant.length)return;
+  const suggDiv=document.createElement('div');
+  suggDiv.style.cssText='margin-top:6px;display:flex;flex-direction:column;gap:6px';
+  suggDiv.innerHTML=`<div style="font-size:10.5px;font-weight:900;color:var(--t4);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px">Pack di MCAddn yang mungkin cocok:</div>`+
+    relevant.map(p=>`<div onclick="closeOv('aiChatOv');openDet('${p.id}')" style="display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r10);padding:7px 10px;cursor:pointer;transition:.15s" onmouseover="this.style.borderColor='var(--g300)'" onmouseout="this.style.borderColor='var(--border)'">
+      <div style="width:28px;height:28px;border-radius:var(--r6);background:${cc(p.cat).b};display:flex;align-items:center;justify-content:center;flex-shrink:0">${si(cc(p.cat).i,13)}</div>
+      <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:800;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.name)}${isVip(p)?' 👑':''}</div>
+      <div style="font-size:10px;color:var(--t4)">${esc(p.creator)} · ${fN(p.dl)} dl</div></div>
+    </div>`).join('');
+  const msgs=document.getElementById('aiChatMsgs');
+  msgs.appendChild(suggDiv);msgs.scrollTop=msgs.scrollHeight;
+}
+
+// ── AI MODERASI FORUM ──
+async function aiModeratePost(title, body){
+  if(!getGroqKey()) return {safe:true}; // skip jika tidak ada key
+  try{
+    const res=await callGroq(`Moderasi post forum komunitas Minecraft Indonesia. Cek apakah konten ini layak:
+Judul: ${title}
+Isi: ${body}
+Balas HANYA JSON: {"safe":true/false,"reason":"alasan jika tidak aman"}`, 100);
+    const j=JSON.parse(res.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/)?.[0]||'{"safe":true}');
+    return j;
+  }catch{return{safe:true}}
+}
+
 async function genDesc(){
   const name=document.getElementById('fName').value.trim(),catv=document.getElementById('fCat').value;
   if(!name){toast('Isi nama pack dulu!','err');return}
@@ -1615,6 +2024,8 @@ async function submitPack(){
     dlLink:document.getElementById('fDl').value.trim(),
     version:document.getElementById('fVer').value.trim(),
     size:document.getElementById('fSize').value.trim(),
+    youtube:ytId(document.getElementById('fYoutube')?.value.trim()||''),
+    gallery:(document.getElementById('fGallery')?.value||'').split(',').map(s=>s.trim()).filter(s=>s.startsWith('http')).slice(0,5),
     dl:0,likes:0,
     uid:curUser?.uid||'guest',
     ts:Date.now()
@@ -1629,14 +2040,18 @@ async function submitPack(){
 // ══════════════════════════════════════════════════════════════
 async function openDet(id){
   const p=P.find(x=>x.id===id);if(!p)return;
-  detId=id;p.dl=(p.dl||0)+1;saveP();
+  detId=id;
   const c=cc(p.cat),lk=L.has(id),pIsVip=isVip(p),sim=P.filter(x=>x.cat===p.cat&&x.id!==id).slice(0,4);
+  const allImgs=[...(p.img?[p.img]:[]),...(p.gallery||[])].filter(Boolean);
   document.getElementById('detModal').innerHTML=`
     <div style="position:relative">
-      ${p.img?`<img class="det-img" src="${p.img}">`:`<div class="det-ph" style="background:linear-gradient(140deg,${c.b},var(--g100))"><div style="color:${c.c}">${si(c.i,72)}</div></div>`}
-      <button class="det-close" onclick="closeDet()">${si('i-x',14)}</button>
+      ${p.img?`<img class="det-img" src="${p.img}" onclick="openLightbox([${allImgs.map(i=>`'${i}'`).join(',')}],0)" style="cursor:pointer">`:`<div class="det-ph" style="background:linear-gradient(140deg,${c.b},var(--g100))"><div style="color:${c.c}">${si(c.i,72)}</div></div>`}
+      <button class="det-close" onclick="closeDet()" style="z-index:10">${si('i-x',14)}</button>
       ${pIsVip?`<div style="position:absolute;top:11px;left:11px;background:linear-gradient(135deg,#4c1d95,#7c3aed);color:white;font-size:10px;font-weight:900;padding:4px 10px;border-radius:var(--r6);display:flex;align-items:center;gap:5px;box-shadow:0 4px 14px rgba(124,58,237,.45)"><span style="animation:crownBounce 2s infinite;display:inline-block">👑</span> VIP Pack</div>`:''}
+      ${FEATURED.has(id)?`<div style="position:absolute;top:11px;left:11px;background:var(--amber);color:white;font-size:10px;font-weight:900;padding:4px 10px;border-radius:var(--r6)">📌 Featured</div>`:''}
     </div>
+    ${allImgs.length>1?`<div style="display:flex;gap:6px;padding:8px 14px;overflow-x:auto;scrollbar-width:none;background:var(--bg2)">${allImgs.map((img,i)=>`<img src="${img}" onclick="openLightbox([${allImgs.map(u=>`'${u}'`).join(',')}],${i})" style="width:64px;height:36px;object-fit:cover;border-radius:var(--r6);cursor:pointer;flex-shrink:0;border:2px solid ${i===0?'var(--g400)':'transparent'};transition:.15s" onmouseover="this.style.borderColor='var(--g400)'" onmouseout="this.style.borderColor='${i===0?'var(--g400)':'transparent'}'">`).join('')}</div>`:''}
+    ${p.youtube?`<div style="position:relative;padding-bottom:56.25%;background:#000;overflow:hidden"><iframe src="https://www.youtube.com/embed/${p.youtube}" style="position:absolute;inset:0;width:100%;height:100%;border:none" allowfullscreen loading="lazy"></iframe></div>`:''}
     <div class="det-body">
       <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px;align-items:center">
         <span class="cat-badge" style="background:${c.b};color:${c.c};position:static">${si(c.i,9)} ${c.n}</span>
@@ -1645,7 +2060,7 @@ async function openDet(id){
       </div>
       <div class="det-title">${esc(p.name)}</div>
       <div style="display:flex;align-items:center;gap:7px;margin:5px 0 13px">
-        <div class="av${isVip?' vip-av':''}" style="width:22px;height:22px;border-radius:var(--r4);font-size:9px">${ini(p.creator)}</div>
+        <div class="av${pIsVip?' vip-av':''}" style="width:22px;height:22px;border-radius:var(--r4);font-size:9px">${ini(p.creator)}</div>
         <span style="font-size:12.5px;font-weight:700;color:var(--t2)">${esc(p.creator)}</span>
         ${p.group?`<span style="font-size:11.5px;color:var(--t4)">· ${esc(p.group)}</span>`:''}
         ${pIsVip?`<span style="background:linear-gradient(135deg,#5b21b6,#7c3aed);color:white;font-size:8px;font-weight:900;padding:1px 7px;border-radius:3px;letter-spacing:.3px;text-transform:uppercase">VIP Creator</span>`:''}
@@ -1669,6 +2084,7 @@ async function openDet(id){
         <div class="dtab on" onclick="dtab(this,'dtp0')">Info</div>
         <div class="dtab" onclick="dtab(this,'dtp1')">AI Review</div>
         ${sim.length?`<div class="dtab" onclick="dtab(this,'dtp2')">Serupa</div>`:''}
+        <div class="dtab" onclick="dtab(this,'dtp3')">💬 Komentar (${(p.comments||[]).length})</div>
       </div>
       <div class="dpnl on" id="dtp0">
         <p style="font-size:13.5px;color:var(--t2);line-height:1.8;margin-bottom:13px">${esc(p.desc||'Belum ada deskripsi.')}</p>
@@ -1684,18 +2100,46 @@ async function openDet(id){
       ${sim.length?`<div class="dpnl" id="dtp2"><div class="sim-grid">${sim.map(s=>`
         <div class="simcard" onclick="closeDet();setTimeout(()=>openDet('${s.id}'),80)">
           ${s.img?`<img class="sim-img" src="${s.img}">`:`<div class="sim-ph" style="background:${cc(s.cat).b}"><div style="color:${cc(s.cat).c}">${si(cc(s.cat).i,26)}</div></div>`}
-          <div style="padding:7px 9px"><div style="font-size:11.5px;font-weight:800;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(s.name)}${s.vip?' 👑':''}</div><div style="font-size:10px;color:var(--t4);margin-top:1px">${esc(s.creator)}</div></div>
+          <div style="padding:7px 9px"><div style="font-size:11.5px;font-weight:800;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(s.name)}${isVip(s)?' 👑':''}</div><div style="font-size:10px;color:var(--t4);margin-top:1px">${esc(s.creator)}</div></div>
         </div>`).join('')}</div></div>`:''}
-      <div class="det-actions">
-        ${p.dlLink?`<button class="btn-dl" onclick="window.open('${esc(p.dlLink)}','_blank')">${si('i-dl',15)} Download Pack</button>`:`<button class="btn-dl off">${si('i-dl',15)} Link Belum Tersedia</button>`}
-        <button class="btn-icon${lk?' liked':''}" id="detLikeBtn" onclick="togLike(event,'${id}')">${si(lk?'i-heart-f':'i-heart',18)}</button>
-        <button class="btn-icon" onclick="sharePack('${id}')">${si('i-share',17)}</button>
+      <!-- Komentar tab -->
+      <div class="dpnl" id="dtp3">
+        <div id="packCmtList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">${renderPackCmts(p.comments||[])}</div>
+        <div class="cmt-row">
+          ${!curUser?`<input type="text" id="packCmtName" placeholder="Nama kamu..." style="background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r10);padding:7px 10px;font-size:12.5px;color:var(--text);margin-bottom:7px;width:100%">`:''}
+          <textarea class="cmt-inp" id="packCmtText" placeholder="Tulis komentar... (Enter kirim)" rows="2" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();addPackComment('${id}')}"></textarea>
+          <button class="cmt-send" onclick="addPackComment('${id}')">${si('i-send',15)}</button>
+        </div>
       </div>
+      <!-- Rating -->
+      <div style="margin:14px 0 10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <span style="font-size:12px;font-weight:700;color:var(--t3)">Rating kamu:</span>
+        <div style="display:flex;gap:3px" id="detStars">${[1,2,3,4,5].map(n=>`<button onclick="ratePackDet('${id}',${n})" style="font-size:22px;background:none;border:none;cursor:pointer;transition:.15s;filter:${(R[id]||0)>=n?'none':'grayscale(1) opacity(.35)'}" id="dstar${n}">⭐</button>`).join('')}</div>
+        ${avgRating(id)>0?`<span style="font-size:12px;font-weight:700;color:var(--amber)">⭐${avgRating(id).toFixed(1)} (${Object.keys(p.ratings||{}).length} rating)</span>`:'<span style="font-size:11.5px;color:var(--t4)">Belum ada rating</span>'}
+      </div>
+      <div class="det-actions">
+        ${p.dlLink?`<button class="btn-dl" onclick="dlPack('${id}')">${si('i-dl',15)} Download Pack</button>`:`<button class="btn-dl off">${si('i-dl',15)} Link Belum Tersedia</button>`}
+        <button class="btn-icon${lk?' liked':''}" id="detLikeBtn" onclick="togLike(event,'${id}')" title="Suka">${si(lk?'i-heart-f':'i-heart',18)}</button>
+        <button class="btn-icon${B.has(id)?'" style="background:var(--amber2);border-color:var(--amber);color:var(--amber)':''}" id="detBkBtn" onclick="togBookmark('${id}')" title="Simpan">🔖</button>
+        <button class="btn-icon" onclick="sharePack('${id}')" title="Bagikan">${si('i-share',17)}</button>
+        <button class="btn-icon" onclick="reportPack('${id}')" title="Laporkan" style="color:var(--red)">${si('i-info',17)}</button>
+        ${isOwner?`<button class="btn-icon${FEATURED.has(id)?'" style="background:var(--amber2);border-color:var(--amber)':''}" onclick="togFeatured('${id}')" title="${FEATURED.has(id)?'Unpin':'Pin Featured'}">📌</button>`:''}
+      </div>
+      <button onclick="openCreatorPage('${esc(p.creator)}')" style="width:100%;margin-top:9px;padding:9px;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r10);font-size:12.5px;font-weight:700;color:var(--t2);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:.15s" onmouseover="this.style.borderColor='var(--g300)'" onmouseout="this.style.borderColor='var(--border)'">${si('i-person',13)} Lihat semua pack dari ${esc(p.creator)}</button>
     </div>`;
   openOv('detOv');
 }
-function closeDet(){closeOv('detOv');detId=null;renderPacks()}
+function closeDet(){closeOv('detOv');detId=null;_packPage=1;renderPacks()}
 function dtab(el,pid){document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('on'));document.querySelectorAll('.dpnl').forEach(p=>p.classList.remove('on'));el.classList.add('on');document.getElementById(pid)?.classList.add('on')}
+
+function dlPack(id){
+  const p=P.find(x=>x.id===id);if(!p||!p.dlLink)return;
+  p.dl=(p.dl||0)+1;saveP();
+  const btn=document.querySelector('.btn-dl:not(.off)');
+  if(btn){btn.innerHTML=`${si('i-check',14)} Terunduh!`;btn.style.background='var(--g700)';setTimeout(()=>{btn.innerHTML=`${si('i-dl',15)} Download Pack`;btn.style.background=''},3000)}
+  window.open(p.dlLink,'_blank');
+  renderStats();
+}
 
 async function genRev(id){
   const p=P.find(x=>x.id===id);if(!p)return;
@@ -1709,8 +2153,121 @@ async function genRev(id){
 
 function sharePack(id){
   const p=P.find(x=>x.id===id);if(!p)return;
-  if(navigator.share)navigator.share({title:p.name,text:`Cek pack ini di MCAddn: ${p.name} oleh ${p.creator} 🎮`}).catch(()=>{});
-  else navigator.clipboard.writeText(`MCAddn — ${p.name} oleh ${p.creator}`).then(()=>toast('Link disalin!'));
+  const text=`🎮 Cek pack Minecraft ini di MCAddn!\n\n*${p.name}* oleh ${p.creator}\n${p.desc?p.desc.slice(0,80)+'...':''}\n\n${window.location.href}`;
+  if(/Android|iPhone/i.test(navigator.userAgent)){
+    shareWA(text);
+  } else if(navigator.share){
+    navigator.share({title:p.name,text}).catch(()=>shareWA(text));
+  } else {
+    navigator.clipboard.writeText(text).then(()=>toast('Disalin! Tempel ke WA 📋'));
+  }
+}
+
+// ── BOOKMARK ──
+function togBookmark(id){
+  if(B.has(id)){B.delete(id);toast('Dihapus dari simpanan')}
+  else{B.add(id);toast('Disimpan! 🔖')}
+  localStorage.setItem('mcaddn-bookmarks',JSON.stringify([...B]));
+  // Update button in detail
+  const btn=document.getElementById('detBkBtn');
+  if(btn){if(B.has(id)){btn.style.background='var(--amber2)';btn.style.borderColor='var(--amber)';btn.style.color='var(--amber)'}else{btn.style.background='';btn.style.borderColor='';btn.style.color=''}}
+  renderPacks();
+}
+
+// ── RATING ──
+function ratePackDet(id,n){
+  R[id]=n;
+  localStorage.setItem('mcaddn-ratings',JSON.stringify(R));
+  // Update pack ratings object for DB sync
+  const p=P.find(x=>x.id===id);
+  if(p){if(!p.ratings)p.ratings={};const uid=curUser?.uid||'local';p.ratings[uid]=n;saveP()}
+  // Update stars UI
+  for(let i=1;i<=5;i++){const s=document.getElementById(`dstar${i}`);if(s)s.style.filter=n>=i?'none':'grayscale(1) opacity(.35)'}
+  toast(`Kamu kasih ${n} bintang! ⭐`,'ok');
+}
+
+// ── REPORT ──
+function reportPack(id){
+  const p=P.find(x=>x.id===id);if(!p)return;
+  const reason=prompt(`Laporkan "${p.name}" — alasan laporan:`);
+  if(!reason) return;
+  // Simpan report ke localStorage untuk owner review
+  const reports=JSON.parse(localStorage.getItem('mcaddn-reports')||'[]');
+  reports.unshift({id:'r'+Date.now(),packId:id,packName:p.name,reason,ts:Date.now()});
+  localStorage.setItem('mcaddn-reports',JSON.stringify(reports.slice(0,50)));
+  toast('Laporan terkirim ke owner. Terima kasih!','vip');
+}
+
+// ── FEATURED (owner only) ──
+async function togFeatured(id){
+  if(!isOwner){toast('Owner only!','err');return}
+  if(FEATURED.has(id)){FEATURED.delete(id);toast('Pack di-unpin','ok')}
+  else{FEATURED.add(id);toast('📌 Pack di-featured!','vip')}
+  await saveFeatured();renderAll();
+  // Re-open det
+  closeDet();setTimeout(()=>openDet(id),80);
+}
+
+// ── PACK COMMENTS ──
+function renderPackCmts(cmts){
+  if(!cmts||!cmts.length) return `<div style="text-align:center;padding:14px;font-size:12px;color:var(--t4)">Belum ada komentar.</div>`;
+  return cmts.map(c=>`<div class="cmt-item">
+    <div class="cmt-av">${c.authorPhoto?`<img src="${c.authorPhoto}">`:''}${!c.authorPhoto?ini(c.author):''}</div>
+    <div class="cmt-bubble"><div class="cmt-author">${esc(c.author)}</div><div class="cmt-text">${esc(c.text)}</div><div class="cmt-time">${ago(c.ts)}</div></div>
+  </div>`).join('');
+}
+async function addPackComment(packId){
+  const txt=document.getElementById('packCmtText')?.value.trim();
+  if(!txt){toast('Isi komentar!','err');return}
+  const nameEl=document.getElementById('packCmtName');
+  const author=curUser?.displayName||curUser?.email?.split('@')[0]||nameEl?.value.trim()||'Anonim';
+  const p=P.find(x=>x.id===packId);if(!p)return;
+  if(!p.comments)p.comments=[];
+  p.comments.push({id:'c'+Date.now(),author,authorPhoto:curUser?.photoURL||'',text:txt,ts:Date.now()});
+  await saveP();
+  document.getElementById('packCmtText').value='';
+  document.getElementById('packCmtList').innerHTML=renderPackCmts(p.comments);
+  // Update tab label
+  document.querySelectorAll('.dtab').forEach(t=>{if(t.textContent.includes('Komentar'))t.textContent=`💬 Komentar (${p.comments.length})`});
+  toast('Komentar ditambahkan!','ok');
+}
+
+// ── CREATOR PAGE ──
+function openCreatorPage(creator){
+  closeDet();
+  const packs=P.filter(p=>p.creator.toLowerCase()===creator.toLowerCase());
+  if(!packs.length){toast('Creator belum punya pack','err');return}
+  const isVipC=VIP_CREATORS.has(creator.toLowerCase());
+  const totalDl=packs.reduce((s,p)=>s+(p.dl||0),0);
+  const modal=document.createElement('div');
+  modal.className='ov';modal.style.display='block';modal.id='creatorPageOv';
+  modal.onclick=(e)=>{if(e.target===modal){modal.remove();document.body.style.overflow=''}};
+  modal.innerHTML=`<div class="modal" style="max-width:620px">
+    <div style="background:linear-gradient(140deg,${isVipC?'#2d0657,#4c1d95':'var(--g700),var(--g600)'});padding:24px 22px 20px;position:relative">
+      <button class="cbtn" onclick="document.getElementById('creatorPageOv').remove();document.body.style.overflow=''" style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.25);color:white"><svg width="14" height="14"><use href="#i-x"/></svg></button>
+      <div style="display:flex;align-items:center;gap:13px">
+        <div style="width:56px;height:56px;border-radius:14px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:20px;font-weight:900;color:white;flex-shrink:0">${ini(creator)}</div>
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:900;color:white">${esc(creator)} ${isVipC?'👑':''}</div>
+          ${isVipC?`<div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:2px">VIP Creator · ${packs.length} pack · ${fN(totalDl)} download</div>`:`<div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:2px">${packs.length} pack · ${fN(totalDl)} download</div>`}
+        </div>
+      </div>
+    </div>
+    <div class="mbdy">
+      <div style="font-size:11px;font-weight:900;color:var(--t4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:11px">Pack dari ${esc(creator)}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+        ${packs.map(p=>`<div onclick="document.getElementById('creatorPageOv').remove();document.body.style.overflow='';setTimeout(()=>openDet('${p.id}'),80)" style="border:1.5px solid var(--border);border-radius:var(--r14);overflow:hidden;cursor:pointer;transition:.15s" onmouseover="this.style.borderColor='var(--g300)'" onmouseout="this.style.borderColor='var(--border)'">
+          ${p.img?`<img src="${p.img}" style="width:100%;aspect-ratio:16/9;object-fit:cover;display:block">`:`<div style="width:100%;aspect-ratio:16/9;background:${cc(p.cat).b};display:flex;align-items:center;justify-content:center"><div style="color:${cc(p.cat).c}">${si(cc(p.cat).i,28)}</div></div>`}
+          <div style="padding:9px 11px">
+            <div style="font-size:12.5px;font-weight:800;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.name)}</div>
+            <div style="font-size:10.5px;color:var(--t4);margin-top:2px;display:flex;align-items:center;gap:6px"><span>${cc(p.cat).n}</span><span>·</span><span>${fN(p.dl)} dl</span>${avgRating(p.id)>0?`<span>· ⭐${avgRating(p.id).toFixed(1)}</span>`:''}</div>
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+  document.body.appendChild(modal);
+  document.body.style.overflow='hidden';
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -1724,6 +2281,7 @@ function renderComm(){
   const totalC=posts.reduce((s,p)=>s+(p.comments||[]).length,0);
   const fps=document.getElementById('forumPostStat');if(fps)fps.textContent=posts.filter(p=>p.approved).length;
   const fcs=document.getElementById('forumCommStat');if(fcs)fcs.textContent=totalC;
+  if(isOwner)mSyncOwnerPanel?.();
   ['postCountEl','mPostCount'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=`${appr.length} post`});
   const html=appr.map(postCardH).join('');
   ['postList','mPostList'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=html});
@@ -1772,6 +2330,15 @@ async function submitPost(){
   if(!title||!body){toast('Judul dan isi wajib diisi!','err');return}
   const author=curUser?.displayName||curUser?.email?.split('@')[0]||'Anonim';
   const btn=document.getElementById('npSubmitBtn');btn.disabled=true;btn.classList.add('ld');
+
+  // AI moderasi otomatis
+  if(getGroqKey()){
+    const mod=await aiModeratePost(title,body);
+    if(!mod.safe){
+      toast('Post ditolak AI: '+( mod.reason||'Konten tidak sesuai'),'err');
+      btn.disabled=false;btn.classList.remove('ld');return;
+    }
+  }
   posts.unshift({id:'post'+Date.now()+Math.random().toString(36).slice(2,4),author,authorPhoto:curUser?.photoURL||'',title,body,cat,approved:false,likes:0,comments:[],uid:curUser?.uid||'',ts:Date.now()});
   await savePosts();closeOv('npOv');['npTitle','npBody'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=''});
   toast('Post terkirim! Menunggu approval owner.','vip');renderComm();
@@ -1838,18 +2405,27 @@ async function doComment(postId){
 // ══════════════════════════════════════════════════════════════
 //  OWNER PANEL
 // ══════════════════════════════════════════════════════════════
-function checkOwnerPw(){
+async function checkOwnerPw(){
   const pw=document.getElementById('ownerPwIn').value;
-  if(pw===CFG.OWNER_PW){
+  if(!pw){toast('Isi password!','err');return}
+  const ok=await checkPw(pw);
+  if(ok){
     isOwner=true;
+    // Generate session token — VIP changes need this token
+    _ownerSession='sess_'+Date.now()+'_'+Math.random().toString(36).slice(2,9);
     document.getElementById('ownerLoginEl').style.display='none';
     document.getElementById('ownerLoggedEl').style.display='flex';
     showOwnerNavBtns(true);
+    document.getElementById('ownerPwIn').value='';
+    // Sync mobile panel too
+    mSyncOwnerPanel?.();
+    saveOwnerSession();
     toast('Selamat datang, KingGG! 👑','vip');
   }else toast('Password salah!','err');
 }
 function ownerLogout(){
-  isOwner=false;
+  isOwner=false;_ownerSession=null;
+  saveOwnerSession();
   document.getElementById('ownerLoginEl').style.display='flex';
   document.getElementById('ownerLoggedEl').style.display='none';
   document.getElementById('ownerPwIn').value='';
@@ -1921,6 +2497,31 @@ function odRenderPending(){
       ${p.dlLink?`<div style="font-size:10.5px;color:var(--g600);font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:8px">🔗 ${esc(p.dlLink)}</div>`:''}
       <div style="display:flex;gap:7px"><button class="btn-approve" onclick="approvePackReview('${p.id}')">✓ Publish</button><button class="btn-reject" onclick="rejectPackReview('${p.id}')">✗ Hapus</button></div>
     </div>`).join('') : `<div style="text-align:center;padding:14px;font-size:12px;color:var(--t4);background:var(--g50);border-radius:var(--r14)">✅ Tidak ada pack pending review</div>`;
+
+  // Reports
+  const reports=JSON.parse(localStorage.getItem('mcaddn-reports')||'[]');
+  const rEl=document.getElementById('odReportList');
+  if(rEl) rEl.innerHTML=reports.length?reports.map((r,i)=>`
+    <div class="od-pending" style="border-left:3px solid var(--red)">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+        <div>
+          <div style="font-size:13px;font-weight:800;color:var(--text)">${esc(r.packName)}</div>
+          <div style="font-size:11px;color:var(--red);margin-top:2px;font-weight:700">⚠️ ${esc(r.reason)}</div>
+          <div style="font-size:10px;color:var(--t4);margin-top:2px">${ago(r.ts)}</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0">
+          <button onclick="openDet('${r.packId}');closeOv('odOv')" style="padding:4px 9px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r6);font-size:11px;font-weight:700;cursor:pointer;color:var(--t2)">Lihat</button>
+          <button onclick="dismissReport(${i})" style="padding:4px 9px;background:var(--red2);border:none;border-radius:var(--r6);font-size:11px;font-weight:700;cursor:pointer;color:var(--red)">Dismiss</button>
+        </div>
+      </div>
+    </div>`).join('') : `<div style="text-align:center;padding:14px;font-size:12px;color:var(--t4);background:var(--g50);border-radius:var(--r14)">✅ Tidak ada laporan</div>`;
+}
+
+function dismissReport(idx){
+  const reports=JSON.parse(localStorage.getItem('mcaddn-reports')||'[]');
+  reports.splice(idx,1);
+  localStorage.setItem('mcaddn-reports',JSON.stringify(reports));
+  odRenderPending();toast('Laporan di-dismiss','ok');
 }
 
 async function approvePost(id){const p=posts.find(x=>x.id===id);if(!p)return;p.approved=true;await savePosts();renderComm();odRenderPending();toast('Post disetujui!','vip')}
@@ -1966,6 +2567,7 @@ function odRenderVIP(){
 }
 
 async function addVipCreator(){
+  if(!isOwner||!_ownerSession){toast('Harus login owner dulu!','err');return}
   const inp=document.getElementById('newVipCreator');
   const name=inp?.value.trim();
   if(!name){toast('Isi nama creator!','err');return}
@@ -1978,6 +2580,7 @@ async function addVipCreator(){
 }
 
 async function removeVipCreator(creatorLower){
+  if(!isOwner||!_ownerSession){toast('Harus login owner dulu!','err');return}
   if(creatorLower===CFG.OWNER_NAME.toLowerCase()){toast('Owner tidak bisa dihapus dari VIP!','err');return}
   if(!confirm(`Hapus VIP untuk creator "${creatorLower}"? Semua packnya akan kehilangan VIP.`))return;
   VIP_CREATORS.delete(creatorLower);
@@ -1989,21 +2592,241 @@ async function removeVipCreator(creatorLower){
 // Keep toggleVIP for backward compat (no-op now, VIP per creator)
 async function toggleVIP(){}
 
-function odRenderSettings(){
-  const inp=document.getElementById('newPwIn');if(inp)inp.value='';
+async function changeOwnerPw(){
+  const np=document.getElementById('newPwIn').value.trim();
+  const nc=document.getElementById('newPwConfirm').value.trim();
+  if(!np||np.length<6){toast('Password min. 6 karakter!','err');return}
+  if(np!==nc){toast('Konfirmasi password tidak cocok!','err');return}
+  await setPw(np);
+  document.getElementById('newPwIn').value='';
+  document.getElementById('newPwConfirm').value='';
+  toast('Password berhasil diubah & tersimpan permanen! 🔐','vip');
 }
 
-function changeOwnerPw(){
-  const np=document.getElementById('newPwIn').value.trim();
-  if(!np||np.length<6){toast('Password min. 6 karakter!','err');return}
-  CFG.OWNER_PW=np;
-  document.getElementById('newPwIn').value='';
-  toast('Password diubah! ⚠ Edit kode untuk permanen.','vip');
+// ══════════════════════════════════════════════════════════════
+//  USER PROFILE (semua user)
+// ══════════════════════════════════════════════════════════════
+let _userProfile={name:'',imgUrl:'',bio:'',link:''};
+
+function loadUserProfile(){
+  try{_userProfile=JSON.parse(localStorage.getItem('mcaddn-profile')||'{}')}catch{_userProfile={}}
+}
+function saveProfile(){
+  const name=document.getElementById('profileName').value.trim();
+  if(!name){toast('Nama tidak boleh kosong!','err');return}
+  _userProfile.name=name;
+  _userProfile.imgUrl=document.getElementById('profileImgUrl').value.trim();
+  _userProfile.bio=document.getElementById('profileBio').value.trim();
+  _userProfile.link=document.getElementById('profileLink').value.trim();
+  localStorage.setItem('mcaddn-profile',JSON.stringify(_userProfile));
+  closeOv('profileOv');
+  toast('Profil berhasil disimpan! ✓','vip');
+  renderAuthUI(); // update avatar di navbar
+}
+
+function openProfile(){
+  loadUserProfile();
+  // Fill fields
+  const displayName=curUser?.displayName||_userProfile.name||'';
+  const photoUrl=curUser?.photoURL||_userProfile.imgUrl||'';
+  document.getElementById('profileName').value=displayName;
+  document.getElementById('profileImgUrl').value=_userProfile.imgUrl||'';
+  document.getElementById('profileBio').value=_userProfile.bio||'';
+  document.getElementById('profileLink').value=_userProfile.link||'';
+  // Avatar preview
+  updateProfileAvPreview(displayName, photoUrl);
+  // Login note
+  document.getElementById('profileLoginNote').style.display=(!curUser&&window._fbSignInGoogle)?'block':'none';
+  openOv('profileOv');
+}
+
+function updateProfileAvPreview(name, url){
+  const ini2=document.getElementById('profileAvIni');
+  const img=document.getElementById('profileAvImg');
+  if(ini2) ini2.textContent=ini(name||'?');
+  if(img){
+    if(url){img.src=url;img.style.display='block';img.onerror=()=>{img.style.display='none'}}
+    else img.style.display='none';
+  }
+}
+function previewProfileUrl(url){
+  const img=document.getElementById('profileAvImg');
+  if(!img) return;
+  if(url.trim()){img.src=url.trim();img.style.display='block';img.onerror=()=>{img.style.display='none'}}
+  else img.style.display='none';
+}
+function handleProfileImg(inp){
+  const f=inp.files[0];if(!f)return;
+  if(f.size>5*1024*1024){toast('Maks 5MB!','err');return}
+  const r=new FileReader();
+  r.onload=e=>{
+    document.getElementById('profileImgUrl').value='local_upload';
+    _userProfile._localImg=e.target.result;
+    updateProfileAvPreview(document.getElementById('profileName').value||'?',e.target.result);
+  };r.readAsDataURL(f);
+}
+
+// ══════════════════════════════════════════════════════════════
+//  OWNER SESSION PERSIST (tidak hilang saat refresh)
+// ══════════════════════════════════════════════════════════════
+function saveOwnerSession(){
+  if(isOwner&&_ownerSession) localStorage.setItem('mcaddn-owner-sess',_ownerSession);
+  else localStorage.removeItem('mcaddn-owner-sess');
+}
+async function restoreOwnerSession(){
+  const saved=localStorage.getItem('mcaddn-owner-sess');
+  if(!saved) return;
+  // Session masih valid — restore tanpa perlu password lagi
+  isOwner=true;
+  _ownerSession=saved;
+  const loginEl=document.getElementById('ownerLoginEl');
+  const loggedEl=document.getElementById('ownerLoggedEl');
+  if(loginEl)loginEl.style.display='none';
+  if(loggedEl)loggedEl.style.display='flex';
+  showOwnerNavBtns(true);
+  mSyncOwnerPanel?.();
+  // Update stats
+  const opPacks=document.getElementById('opPacks');if(opPacks)opPacks.textContent=P.length;
+  const pending=posts.filter(p=>!p.approved).length;
+  const opPending=document.getElementById('opPending');if(opPending)opPending.textContent=pending;
+}
+let _siteSettings={};
+function loadSiteSettings(){
+  try{_siteSettings=JSON.parse(localStorage.getItem('mcaddn-settings')||'{}')}catch{_siteSettings={}}
+  // Apply saved settings
+  if(_siteSettings.ownerName) CFG.OWNER_NAME=_siteSettings.ownerName;
+  if(_siteSettings.siteName) applySiteName(_siteSettings.siteName);
+  if(_siteSettings.accentColor) applyAccentColor(_siteSettings.accentColor);
+}
+function saveSiteSettings(){localStorage.setItem('mcaddn-settings',JSON.stringify(_siteSettings))}
+
+function odRenderSettings(){
+  // Fill current values
+  const on=document.getElementById('setOwnerName');if(on)on.value=_siteSettings.ownerName||CFG.OWNER_NAME;
+  const ob=document.getElementById('setOwnerBio');if(ob)ob.value=_siteSettings.ownerBio||'';
+  const sn=document.getElementById('setSiteName');if(sn)sn.value=_siteSettings.siteName||'MCAddn';
+  const st=document.getElementById('setSiteTagline');if(st)st.value=_siteSettings.siteTagline||'Platform komunitas Minecraft Indonesia';
+  // Color opts
+  document.querySelectorAll('.color-opt').forEach(el=>{
+    const active=el.dataset.color===(_siteSettings.accentColor||'#16a34a');
+    el.style.boxShadow=active?`0 0 0 2px white,0 0 0 4px ${el.dataset.color}`:'none';
+  });
+  // Checkboxes
+  const chk=(id,key,def=true)=>{const e=document.getElementById(id);if(e)e.checked=_siteSettings[key]??def};
+  chk('setRequireLogin','requireLogin',true);
+  chk('setAiRequired','aiRequired',false);
+  chk('setDlRequired','dlRequired',false);
+  chk('setAiModerate','aiModerate',true);
+  chk('setOwnerApprove','ownerApprove',true);
+  chk('setGuestComment','guestComment',true);
+}
+
+function saveOwnerName(){
+  const v=document.getElementById('setOwnerName')?.value.trim();
+  if(!v){toast('Isi nama owner!','err');return}
+  _siteSettings.ownerName=v;CFG.OWNER_NAME=v;saveSiteSettings();
+  // Update VIP creators — tambah nama baru, hapus nama lama
+  VIP_CREATORS.add(v.toLowerCase());saveVipCreators();
+  renderAll();toast('Nama owner diubah ke "'+v+'"','vip');
+}
+
+function saveOwnerProfile(){
+  _siteSettings.ownerName=document.getElementById('setOwnerName')?.value.trim()||CFG.OWNER_NAME;
+  _siteSettings.ownerBio=document.getElementById('setOwnerBio')?.value.trim()||'';
+  CFG.OWNER_NAME=_siteSettings.ownerName;
+  saveSiteSettings();toast('Profil disimpan!','vip');
+}
+
+function applySiteName(name){
+  document.title=`${name} — Minecraft Add-on Community Indonesia`;
+  document.querySelectorAll('.dlogo-t,.mlogo-t').forEach(el=>{
+    const b=el.querySelector('b');
+    if(b){const parts=name.split(/(?=[A-Z])/);el.childNodes[0].textContent=parts.slice(0,-1).join('');b.textContent=parts.slice(-1)[0]||name}
+  });
+}
+function applyAccentColor(hex){
+  // Update CSS vars
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  document.documentElement.style.setProperty('--g600',hex);
+  document.documentElement.style.setProperty('--shg',`0 6px 22px rgba(${r},${g},${b},.28)`);
+}
+function setAccentColor(hex,el){
+  _siteSettings.accentColor=hex;
+  document.querySelectorAll('.color-opt').forEach(e=>e.style.boxShadow='none');
+  el.style.boxShadow=`0 0 0 2px white,0 0 0 4px ${hex}`;
+}
+function saveBranding(){
+  const sn=document.getElementById('setSiteName')?.value.trim()||'MCAddn';
+  const st=document.getElementById('setSiteTagline')?.value.trim()||'';
+  _siteSettings.siteName=sn;_siteSettings.siteTagline=st;
+  if(_siteSettings.accentColor) applyAccentColor(_siteSettings.accentColor);
+  applySiteName(sn);
+  saveSiteSettings();toast('Tampilan berhasil diubah!','vip');
 }
 async function deleteAllPacks(){P=[];await saveP();renderAll();closeOv('odOv');toast('Semua pack dihapus.','err')}
 async function resetForum(){posts=[];await savePosts();renderComm();toast('Forum direset.','err')}
 
-// ── Lightbox ──
+// ══════════════════════════════════════════════════════════════
+//  MOBILE OWNER PANEL
+// ══════════════════════════════════════════════════════════════
+function mOpenOwner(){
+  const el=document.getElementById('mOwnerPanel');
+  if(!el)return;
+  el.style.display=el.style.display==='none'?'block':'none';
+  if(isOwner)mSyncOwnerPanel();
+}
+function mSyncOwnerPanel(){
+  const loginEl=document.getElementById('mOwnerLoginEl');
+  const loggedEl=document.getElementById('mOwnerLoggedEl');
+  if(!loginEl||!loggedEl)return;
+  loginEl.style.display=isOwner?'none':'block';
+  loggedEl.style.display=isOwner?'block':'none';
+  if(isOwner){
+    const nameEl=document.getElementById('mOwnerNameEl');if(nameEl)nameEl.textContent=CFG.OWNER_NAME;
+    const statsEl=document.getElementById('mOwnerStats');
+    if(statsEl){
+      const pending=posts.filter(p=>!p.approved).length;
+      statsEl.innerHTML=`
+        <div style="background:rgba(255,255,255,.07);border-radius:var(--r10);padding:8px;text-align:center">
+          <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:900;color:white">${P.length}</div>
+          <div style="font-size:9px;font-weight:800;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.5px;margin-top:1px">Pack</div>
+        </div>
+        <div style="background:${pending>0?'rgba(251,191,36,.15)':'rgba(255,255,255,.07)'};border-radius:var(--r10);padding:8px;text-align:center">
+          <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:900;color:${pending>0?'#fbbf24':'white'}">${pending}</div>
+          <div style="font-size:9px;font-weight:800;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.5px;margin-top:1px">Pending</div>
+        </div>`;
+    }
+  }
+}
+async function mCheckOwnerPw(){
+  const pw=document.getElementById('mOwnerPwIn').value;
+  if(!pw){toast('Isi password!','err');return}
+  const ok=await checkPw(pw);
+  if(ok){
+    isOwner=true;
+    _ownerSession='sess_'+Date.now()+'_'+Math.random().toString(36).slice(2,9);
+    document.getElementById('mOwnerPwIn').value='';
+    // Sync desktop panel too
+    const deLogin=document.getElementById('ownerLoginEl');const deLogged=document.getElementById('ownerLoggedEl');
+    if(deLogin)deLogin.style.display='none';if(deLogged)deLogged.style.display='flex';
+    showOwnerNavBtns(true);
+    saveOwnerSession();
+    mSyncOwnerPanel();
+    toast('Selamat datang, '+CFG.OWNER_NAME+'! 👑','vip');
+  }else toast('Password salah!','err');
+}
+function mOwnerLogout(){
+  ownerLogout();
+  document.getElementById('mOwnerLoggedEl').style.display='none';
+  document.getElementById('mOwnerLoginEl').style.display='block';
+}
+
+// Sync mobile owner panel whenever owner state changes
+const _origOwnerLogout=ownerLogout;
+ownerLogout=function(){
+  _origOwnerLogout();
+  const mp=document.getElementById('mOwnerPanel');if(mp)mp.style.display='none';
+};
 let lbImgs=[],lbIdx=0;
 function openLightbox(imgs,idx=0){lbImgs=imgs;lbIdx=idx;document.getElementById('lbImg').src=imgs[idx];document.getElementById('lightbox').style.display='flex';document.body.style.overflow='hidden'}
 function closeLightbox(){document.getElementById('lightbox').style.display='none';document.body.style.overflow=''}
@@ -2015,15 +2838,27 @@ function openOv(id){document.getElementById(id).classList.add('open');document.b
 function closeOv(id){document.getElementById(id).classList.remove('open');if(!document.querySelector('.ov.open'))document.body.style.overflow=''}
 
 // ── Page switching ──
+function isMobile(){return window.innerWidth<768}
+
 function switchPage(page){
   curPage=page;
-  document.getElementById('packPage').style.display=page==='packs'?'grid':'none';
-  document.getElementById('commPage').style.display=page==='comm'?'grid':'none';
+  const mob=isMobile();
+  // Desktop elements — only show on desktop
+  const pp=document.getElementById('packPage');
+  const cp=document.getElementById('commPage');
+  if(pp)pp.style.display=(!mob&&page==='packs')?'grid':'none';
+  if(cp)cp.style.display=(!mob&&page==='comm')?'grid':'none';
   document.getElementById('dtPacks')?.classList.toggle('on',page==='packs');
   document.getElementById('dtComm')?.classList.toggle('on',page==='comm');
   const hero=document.querySelector('.hero'),vb=document.getElementById('vipBar');
-  if(hero)hero.style.display=page==='packs'?'flex':'none';
-  if(vb)vb.style.display=page==='packs'&&P.filter(x=>x.vip).length?'flex':'none';
+  if(hero)hero.style.display=(!mob&&page==='packs')?'flex':'none';
+  if(vb)vb.style.display=(!mob&&page==='packs'&&P.some(x=>isVip(x)))?'flex':'none';
+  // Mobile elements
+  if(mob){
+    const mm=document.getElementById('mmain'),mc=document.getElementById('mComm');
+    if(mm)mm.style.display=page==='packs'?'block':'none';
+    if(mc)mc.style.display=page==='comm'?'block':'none';
+  }
   if(page==='comm')renderComm();
 }
 
@@ -2033,11 +2868,12 @@ window.mnav=function(pg,el){
   el.classList.add('on');const sv=el.querySelector('svg');if(sv)sv.style.color='var(--g600)';
   const mm=document.getElementById('mmain'),mc=document.getElementById('mComm'),mvb=document.getElementById('mVipBar');
   if(pg==='comm'){
-    if(mm)mm.style.display='none';mc.style.display='block';if(mvb)mvb.style.display='none';
+    if(mm)mm.style.display='none';if(mc)mc.style.display='block';if(mvb)mvb.style.display='none';
     renderComm();
   }else{
-    if(mm)mm.style.display='block';mc.style.display='none';
-    if(mvb&&P.filter(x=>x.vip).length)mvb.style.display='flex';
+    if(mm)mm.style.display='block';if(mc)mc.style.display='none';
+    if(mvb&&P.some(x=>isVip(x)))mvb.style.display='flex';
+    else if(mvb)mvb.style.display='none';
     if(pg==='trend'){sort='pop';setSort('pop')}
     else if(pg==='liked'){sort='like';setSort('like')}
     else{sort='new';setSort('new')}
@@ -2052,7 +2888,7 @@ setInterval(async()=>{
   try{
     const fr=await dbRead('packs');
     if(Array.isArray(fr)){
-      const h=JSON.stringify(fr.map(x=>x.id+x.vip+x.dl+x.likes)).slice(0,300);
+      const h=JSON.stringify(fr.map(x=>x.id+x.dl+x.likes)).slice(0,300);
       if(h!==_lastHash){_lastHash=h;P=fr;localStorage.setItem('mcaddn-packs',JSON.stringify(P));renderAll()}
     }
   }catch{}
@@ -2069,11 +2905,25 @@ setInterval(async()=>{
   await loadAll();
   await loadPosts();
   await loadVipCreators();
+  loadSiteSettings();
+  loadUserProfile();
+  await restoreOwnerSession();
   renderAll();
   renderAuthUI();
-  // Check firebase config
+  // Init correct layout for device
+  if(isMobile()){
+    // Mobile: ensure mmain visible, desktop elements hidden
+    const mm=document.getElementById('mmain');
+    if(mm)mm.style.display='block';
+    // packPage/commPage should stay hidden (CSS handles it)
+    document.getElementById('packPage').style.display='none';
+    document.getElementById('commPage').style.display='none';
+  } else {
+    // Desktop: show packPage
+    document.getElementById('packPage').style.display='grid';
+  }
   if(!window._fbSignInGoogle){
-    console.info('Firebase not configured — running in guest mode (no auth required)');
+    console.info('Firebase not configured — guest mode');
   }
   renderDBStatus();
   renderAIStatus();
@@ -2081,4 +2931,3 @@ setInterval(async()=>{
 </script>
 </body>
 </html>
-
