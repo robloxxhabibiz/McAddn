@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id" data-theme="light">
 <head>
@@ -616,7 +617,7 @@ img{display:block;max-width:100%}
 </div>
 <nav class="mbot">
   <button class="mbitem on" id="mn0" onclick="mNav('packs',this)"><svg width="18" height="18" color="var(--g600)"><use href="#i-home"/></svg><span class="mblbl">Beranda</span></button>
-  <button class="mbitem" id="mn1" onclick="mNav('comm',this)"><svg width="18" height="18" color="var(--t4)"><use href="#i-comm"/></svg><span class="mblbl">Forum</span></button>
+  <button class="mbitem" id="mn1" onclick="mNav('comm',this)"><div style="position:relative;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" color="var(--t4)"><use href="#i-comm"/></svg><span id="pendBadge" style="display:none;position:absolute;top:-4px;right:-6px;width:14px;height:14px;border-radius:50%;background:var(--red);font-size:8px;font-weight:900;color:white;align-items:center;justify-content:center">0</span></div><span class="mblbl">Forum</span></button>
   <button class="mfab" onclick="reqAuth(openUpload)"><svg width="16" height="16"><use href="#i-up"/></svg></button>
   <button class="mbitem" id="mn2" onclick="openAI()"><svg width="18" height="18" color="var(--t4)"><use href="#i-spark"/></svg><span class="mblbl">AI Chat</span></button>
   <button class="mbitem" id="mn3" onclick="mNav('profil',this)"><svg width="18" height="18" color="var(--t4)"><use href="#i-person"/></svg><span class="mblbl">Profil</span></button>
@@ -708,10 +709,10 @@ img{display:block;max-width:100%}
 <div class="ov" id="odOv" onclick="if(event.target.id==='odOv')closeOv('odOv')">
   <div class="odash">
     <div class="od-hd"><div style="width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,#4338ca,#6366f1);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">👑</div><div style="flex:1"><div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:900;color:white">Owner Dashboard</div><div style="font-size:10.5px;color:rgba(255,255,255,.4)">KingGG · MCAddn</div></div><button class="xbtn" onclick="closeOv('odOv')" style="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:white"><svg width="12" height="12"><use href="#i-x"/></svg></button></div>
-    <div class="od-tabs"><button class="odtab on" id="odt0" onclick="odSw(0)">📊 Overview</button><button class="odtab" id="odt1" onclick="odSw(1)">📥 Pending</button><button class="odtab" id="odt2" onclick="odSw(2)">👑 VIP</button><button class="odtab" id="odt3" onclick="odSw(3)">🪔 Lebaran</button><button class="odtab" id="odt4" onclick="odSw(4)">⚙️ Settings</button></div>
+    <div class="od-tabs"><button class="odtab on" id="odt0" onclick="odSw(0)">📊 Overview</button><button class="odtab" id="odt1" onclick="odSw(1)">📥 Pending</button><button class="odtab" id="odt2" onclick="odSw(2)">👑 VIP</button><button class="odtab" id="odt3" onclick="odSw(3)">🪔 Lebaran</button><button class="odtab" id="odt4" onclick="odSw(4)">📦 Pack</button><button class="odtab" id="odt5" onclick="odSw(5)">🚫 Users</button><button class="odtab" id="odt6" onclick="odSw(6)">💾 Backup</button><button class="odtab" id="odt7" onclick="odSw(7)">⚙️ Settings</button></div>
     <div class="od-body">
       <!-- Overview -->
-      <div class="od-panel on" id="odp0"><div class="od-stats" id="odStats"></div><div style="font-size:10px;font-weight:900;color:var(--t4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">Top Pack</div><div id="odTopP"></div><div style="font-size:10px;font-weight:900;color:var(--t4);text-transform:uppercase;letter-spacing:1.5px;margin:13px 0 8px">Quick Actions</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px"><button onclick="odSw(1)" class="qbtn" style="background:var(--blu2);color:var(--blu)">📥 Pending</button><button onclick="odSw(2)" class="qbtn" style="background:var(--vip2);color:var(--vip)">👑 VIP</button><button onclick="odSw(3)" class="qbtn" style="background:var(--amb2);color:var(--amb)">🪔 Lebaran</button><button onclick="closeOv('odOv');reqAuth(openUpload)" class="qbtn" style="background:var(--g50);color:var(--g700)">📤 Upload</button><button onclick="odSw(4)" class="qbtn" style="background:var(--bg2);color:var(--t2)">⚙️ Settings</button><button onclick="ownerLogout();closeOv('odOv')" class="qbtn" style="background:var(--red2);color:var(--red)">🚪 Logout</button></div></div>
+      <div class="od-panel on" id="odp0"><div class="od-stats" id="odStats"></div><div style="font-size:10px;font-weight:900;color:var(--t4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">Top Pack</div><div id="odTopP"></div><div style="font-size:10px;font-weight:900;color:var(--t4);text-transform:uppercase;letter-spacing:1.5px;margin:13px 0 8px">Quick Actions</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px"><button onclick="odSw(1)" class="qbtn" style="background:var(--blu2);color:var(--blu)">📥 Pending</button><button onclick="odSw(2)" class="qbtn" style="background:var(--vip2);color:var(--vip)">👑 VIP</button><button onclick="odSw(3)" class="qbtn" style="background:var(--amb2);color:var(--amb)">🪔 Lebaran</button><button onclick="odSw(4)" class="qbtn" style="background:var(--g50);color:var(--g700)">📦 Pack</button><button onclick="odSw(5)" class="qbtn" style="background:var(--red2);color:var(--red)">🚫 Users</button><button onclick="odSw(6)" class="qbtn" style="background:var(--blu2);color:var(--blu)">💾 Backup</button><button onclick="odSw(7)" class="qbtn" style="background:var(--bg2);color:var(--t2)">⚙️ Settings</button><button onclick="ownerLogout();closeOv('odOv')" class="qbtn" style="background:var(--red2);color:var(--red)">🚪 Logout</button></div></div>
       <!-- Pending -->
       <div class="od-panel" id="odp1">
         <div style="font-size:10px;font-weight:900;color:var(--t4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:9px">📥 Pack Pending Review</div><div id="odPendPk"></div>
@@ -731,8 +732,64 @@ img{display:block;max-width:100%}
         <div class="sblk"><div class="stitle">👑 Creator yang Sudah Klaim <span id="lbrClaimCnt" style="background:var(--amb2);color:var(--amb);font-size:10.5px;font-weight:900;padding:2px 8px;border-radius:99px">0/20</span></div><div id="lbrClaimList"><div style="font-size:12px;color:var(--t4);text-align:center;padding:10px">Belum ada yang klaim</div></div><button onclick="resetLbrClaims()" style="width:100%;padding:7px;background:var(--red2);color:var(--red);border:none;border-radius:var(--r10);font-size:12px;font-weight:800;cursor:pointer;margin-top:8px;font-family:inherit">🗑️ Reset Semua Klaim</button></div>
         <div class="sblk"><div class="stitle">📣 Pengumuman Homepage</div><textarea class="fta" id="annIn" placeholder="Tulis pengumuman untuk semua user..." style="min-height:62px;margin-bottom:7px"></textarea><div style="display:flex;gap:6px"><button onclick="saveAnn()" style="flex:1;padding:8px;background:var(--blu);color:white;border:none;border-radius:var(--r10);font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit">Publish</button><button onclick="clearAnn()" style="padding:8px 12px;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r10);font-size:12.5px;font-weight:700;color:var(--t3);cursor:pointer;font-family:inherit">Hapus</button></div></div>
       </div>
-      <!-- Settings -->
+      <!-- Pack Management -->
       <div class="od-panel" id="odp4">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px">
+          <div style="font-size:10px;font-weight:900;color:var(--t4);text-transform:uppercase;letter-spacing:1.5px">Kelola Pack</div>
+          <div style="display:flex;gap:5px">
+            <input type="text" id="packSearch" placeholder="Cari pack..." class="fi" style="font-size:12px;padding:5px 9px;width:130px" oninput="renderOdPacks()">
+          </div>
+        </div>
+        <div id="odPackList"></div>
+      </div>
+
+      <!-- Users/Ban -->
+      <div class="od-panel" id="odp5">
+        <div style="font-size:10px;font-weight:900;color:var(--t4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:9px">Ban / Blokir User</div>
+        <div style="background:var(--red2);border:1.5px dashed #fca5a5;border-radius:var(--r14);padding:10px 12px;margin-bottom:11px">
+          <div style="font-size:10px;font-weight:900;color:var(--red);margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px">+ Ban User</div>
+          <div style="display:flex;gap:6px;margin-bottom:6px"><input type="text" id="banInput" class="fi" placeholder="Nama atau email user..." style="flex:1;font-size:12.5px;padding:7px 9px"><button onclick="banUser()" style="padding:7px 12px;background:var(--red);color:white;border:none;border-radius:var(--r10);font-size:12px;font-weight:800;cursor:pointer;flex-shrink:0;font-family:inherit">Ban 🚫</button></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;font-weight:600;color:var(--t2)"><input type="checkbox" id="banDelPacks" style="width:13px;height:13px;accent-color:var(--red)"> Hapus semua pack-nya</label>
+            <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;font-weight:600;color:var(--t2)"><input type="checkbox" id="banDelPosts" style="width:13px;height:13px;accent-color:var(--red)"> Hapus semua post-nya</label>
+          </div>
+        </div>
+        <div style="font-size:10px;font-weight:900;color:var(--t4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:9px">Daftar User Dibanned</div>
+        <div id="banList"></div>
+        <div style="font-size:10px;font-weight:900;color:var(--t4);text-transform:uppercase;letter-spacing:1.5px;margin:14px 0 9px">Pengaturan Upload</div>
+        <div class="sblk">
+          <div class="fg"><label class="fl">Max upload per user</label><div style="display:flex;gap:7px;align-items:center"><input type="number" class="fi" id="maxUpload" min="1" max="999" placeholder="Tidak terbatas" style="flex:1"><span style="font-size:12px;color:var(--t4);flex-shrink:0">pack</span></div><p style="font-size:10px;color:var(--t4);margin-top:3px">Kosongkan = tidak terbatas</p></div>
+          <button onclick="saveUploadLimit()" style="width:100%;padding:8px;background:var(--g600);color:white;border:none;border-radius:var(--r10);font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit">Simpan Batas Upload</button>
+        </div>
+      </div>
+
+      <!-- Backup & Restore -->
+      <div class="od-panel" id="odp6">
+        <div style="background:linear-gradient(135deg,var(--g50),var(--g100));border:1.5px solid var(--g200);border-radius:var(--r14);padding:13px 15px;margin-bottom:11px">
+          <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:900;color:var(--g700);margin-bottom:3px">💾 Backup & Restore</div>
+          <div style="font-size:12px;color:var(--t3);line-height:1.6">Simpan semua data ke file JSON atau HTML. Bisa di-restore kapan saja.</div>
+        </div>
+        <div class="sblk">
+          <div class="stitle">⬇️ Download Backup</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:9px">
+            <button onclick="backupJSON()" style="padding:9px;background:var(--blu2);color:var(--blu);border:none;border-radius:var(--r10);font-size:12px;font-weight:800;cursor:pointer;font-family:inherit">📄 Backup JSON</button>
+            <button onclick="exportWithData()" style="padding:9px;background:var(--g50);color:var(--g700);border:none;border-radius:var(--r10);font-size:12px;font-weight:800;cursor:pointer;border:1px solid var(--g200);font-family:inherit">🌐 File + Data</button>
+          </div>
+          <div id="backupInfo" style="font-size:11px;color:var(--t4);line-height:1.7;background:var(--bg2);padding:8px 10px;border-radius:var(--r10)">Klik untuk lihat info backup</div>
+        </div>
+        <div class="sblk">
+          <div class="stitle">⬆️ Restore dari JSON</div>
+          <div class="imgdrop" style="min-height:60px" id="restoreDrop">
+            <input type="file" accept=".json" id="restoreFile" onchange="handleRestore(this)">
+            <div style="padding:14px;text-align:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="margin:0 auto 6px"><path d="M12 15V3M9 12l3 3 3-3" stroke="var(--g600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 18H4a2 2 0 01-2-2v-2M19 18h1a2 2 0 002-2v-2" stroke="var(--g600)" stroke-width="1.5" stroke-linecap="round"/></svg><p style="font-size:11.5px;color:var(--t3)">Klik atau drag file <strong style="color:var(--g600)">.json</strong> backup</p></div>
+          </div>
+          <div id="restorePreview" style="display:none;margin-top:8px;background:var(--g50);border:1px solid var(--g200);border-radius:var(--r10);padding:9px 11px;font-size:12px;color:var(--t2);line-height:1.7"></div>
+          <button id="restoreBtn" onclick="doRestore()" style="display:none;width:100%;margin-top:8px;padding:9px;background:var(--g600);color:white;border:none;border-radius:var(--r10);font-size:13px;font-weight:800;cursor:pointer;font-family:inherit">✓ Restore Data Ini</button>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div class="od-panel" id="odp7">
         <!-- Owner Profile -->
         <div class="sblk"><div class="stitle">👑 Profil Owner</div>
           <div class="frow"><div class="fg"><label class="fl">Nama Owner</label><input type="text" class="fi" id="setOwnerName" placeholder="KingGG"></div><div class="fg"><label class="fl">Nama Platform</label><input type="text" class="fi" id="sSiteName" placeholder="MCAddn"></div></div>
@@ -848,7 +905,7 @@ const CFG={
   OWNER:'KingGG',MODEL:'llama-3.3-70b-versatile',
   get DB_URL(){return localStorage.getItem('mc-dburl')||localStorage.getItem('mcaddn-db-url')||'https://game-spaniel-72287.upstash.io'},
   get DB_TOK(){return localStorage.getItem('mc-dbtok')||localStorage.getItem('mcaddn-db-token')||'gQAAAAAAARpfAAIncDE0OGM2YjVkN2JkY2U0ZTczOGZhNjNkODIxOWEyZWMzN3AxNzIyODc'},
-  get GROQ(){return localStorage.getItem('mc-groq')||'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'},
+  get GROQ(){return localStorage.getItem('mc-groq')||''},
 };
 let P=[],LIKES=new Set(),BKS=new Set(),RATS={},FT=new Set(),VIP=new Set();
 let posts=[],PLIKES=new Set(),pcat='all';
@@ -906,6 +963,9 @@ let dark=localStorage.getItem('mc-theme')==='dark';
 function applyTheme(){
   document.documentElement.setAttribute('data-theme',dark?'dark':'light');
   ['dTheme','mTheme'].forEach(id=>{const e=document.getElementById(id);if(e){const u=e.querySelector('use');if(u)u.setAttribute('href',dark?'#i-sun':'#i-moon')}});
+  // Update icon di halaman profil mobile
+  const mti=document.getElementById('mThemeIco');
+  if(mti){const u=mti.querySelector('use');if(u)u.setAttribute('href',dark?'#i-sun':'#i-moon')}
 }
 function toggleTheme(){dark=!dark;localStorage.setItem('mc-theme',dark?'dark':'light');applyTheme()}
 applyTheme();
@@ -990,7 +1050,12 @@ window.addEventListener('authChange',e=>{
   if(document.getElementById('mProfil')?.style.display==='block')renderMProfil();
 });
 function getN(){return UP.name||(curUser?.displayName||curUser?.email?.split('@')[0])||''}
-function getP(){return UP._local||(UP.imgUrl&&UP.imgUrl!=='local'?UP.imgUrl:'')||(curUser?.photoURL||'')}
+function getP(){
+  // Prioritas: foto yang diupload manual → foto dari URL yang diisi → foto Google
+  if(UP._local)return UP._local;
+  if(UP.imgUrl&&UP.imgUrl!=='local')return UP.imgUrl;
+  return curUser?.photoURL||'';
+}
 function renderAuth(){
   const dA=document.getElementById('dAuth'),mA=document.getElementById('mAuth');
   const name=getN(),photo=getP(),in2=ini(name||'U');
@@ -1033,19 +1098,33 @@ function setOwner(v){
   isOwner=v;
   if(v){ownerSess='s'+Date.now();localStorage.setItem('mc-osess',ownerSess)}
   else{ownerSess=null;localStorage.removeItem('mc-osess')}
+  // Sync desktop forum owner panel
   const le=document.getElementById('opLoginEl'),lg=document.getElementById('opLoggedEl');
   if(le)le.style.display=v?'none':'block';
   if(lg)lg.style.display=v?'block':'none';
+  // Sync mobile forum owner panel
   const mle=document.getElementById('mOpLoginEl'),mlg=document.getElementById('mOpLoggedEl');
   if(mle)mle.style.display=v?'none':'block';
   if(mlg)mlg.style.display=v?'block':'none';
+  // Sync mobile profil page owner panel
+  const le2=document.getElementById('mOpLoginEl2'),lg2=document.getElementById('mOpLoggedEl2');
+  if(le2)le2.style.display=v?'none':'block';
+  if(lg2)lg2.style.display=v?'block':'none';
   updOwnerStats();
+  // Kalau halaman profil sedang terbuka, refresh
+  if(document.getElementById('mProfil')?.style.display==='block')renderMProfil();
 }
 function restoreOwner(){const s=localStorage.getItem('mc-osess');if(s){isOwner=true;ownerSess=s;setOwner(true)}}
 function updOwnerStats(){
   const pend=posts.filter(p=>!p.approved).length;
   ['opPacks','mOpPacks'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=P.length});
   ['opPend','mOpPend'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=pend});
+  // Badge merah di Forum nav kalau ada pending (owner only)
+  const badge=document.getElementById('pendBadge');
+  if(badge&&isOwner){
+    if(pend>0){badge.style.display='flex';badge.textContent=pend>9?'9+':pend}
+    else badge.style.display='none';
+  }else if(badge)badge.style.display='none';
   mSyncOwnerPanel();
 }
 async function ownerLogin(){
@@ -1246,7 +1325,7 @@ function cardH(p,isL){
     ${bk?`<div class="bdg" style="bottom:6px;right:6px;font-size:14px">🔖</div>`:''}
     <div class="cbody">
       <div class="ctitle">${esc(p.name)}</div>
-      <div class="ccr"><div class="av${pVip?' vav':''}">${ini(p.creator)}</div>${esc(p.creator)}${p.group?` · ${esc(p.group)}`:''}</div>
+      <div class="ccr" onclick="event.stopPropagation();openCreator('${esc(p.creator)}')" style="cursor:pointer" onmouseover="this.style.color='var(--g600)'" onmouseout="this.style.color=''"><div class="av${pVip?' vav':''}">${ini(p.creator)}</div>${esc(p.creator)}${pVip?` <span style="font-size:8px;background:linear-gradient(135deg,#5b21b6,#7c3aed);color:white;padding:1px 4px;border-radius:3px;font-weight:900">✓</span>`:''}${p.group?` · ${esc(p.group)}`:''}</div>
       ${isL?`<div class="cdesc">${esc(p.desc||'')}</div>`:''}
       <div class="cfoot"><div class="ctags">${(p.tags||[]).slice(0,2).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}${(p.vers||[])[0]?`<span class="tag" style="background:var(--blu2);color:var(--blu)">${esc(p.vers[0])}</span>`:''}</div><div style="display:flex;gap:4px;align-items:center;flex-shrink:0">${ar>0?`<span class="cst" style="color:var(--amb)">⭐${ar.toFixed(1)}</span>`:''}${si('i-dl',9)}<span class="cst">${fN(p.dl)}</span></div></div>
     </div>${we}</div>`;
@@ -1583,7 +1662,147 @@ function aiSuggestPacks(msgsEl,query){
   msgsEl.appendChild(d);
 }
 
-// ════ LEADERBOARD BADGE ════
+// ════ PACK MANAGEMENT ════
+function renderOdPacks(){
+  const q=(document.getElementById('packSearch')?.value||'').toLowerCase();
+  const list=q?P.filter(p=>p.name.toLowerCase().includes(q)||p.creator.toLowerCase().includes(q)):P.slice(0,30);
+  const el=document.getElementById('odPackList');if(!el)return;
+  el.innerHTML=list.length?list.map(p=>`
+    <div class="od-pend" style="display:flex;align-items:center;gap:8px">
+      <div style="width:40px;height:24px;border-radius:var(--r6);background:var(--bg2);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center">${p.img?`<img src="${p.img}" style="width:100%;height:100%;object-fit:cover">`:`<div style="color:${cc(p.cat).c};font-size:9px">${cc(p.cat).n}</div>`}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:800;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.name)}</div>
+        <div style="font-size:10px;color:var(--t4)">${esc(p.creator)} · ${fN(p.dl)} dl${p.pendingReview?' · <span style="color:var(--amb);font-weight:800">Pending</span>':''}</div>
+      </div>
+      <div style="display:flex;gap:4px;flex-shrink:0">
+        <button onclick="editPack('${p.id}')" style="padding:3px 7px;background:var(--blu2);color:var(--blu);border:none;border-radius:var(--r6);font-size:10px;font-weight:800;cursor:pointer;font-family:inherit">Edit</button>
+        <button onclick="ownerDeletePack('${p.id}')" style="padding:3px 7px;background:var(--red2);color:var(--red);border:none;border-radius:var(--r6);font-size:10px;font-weight:800;cursor:pointer;font-family:inherit">Hapus</button>
+        ${p.pendingReview?`<button onclick="approvePackReview('${p.id}')" style="padding:3px 7px;background:var(--g50);color:var(--g700);border:none;border-radius:var(--r6);font-size:10px;font-weight:800;cursor:pointer;font-family:inherit">✓</button>`:''}
+      </div>
+    </div>`).join(''):`<div style="font-size:12px;color:var(--t4);text-align:center;padding:14px">Tidak ada pack ditemukan</div>`;
+  el.innerHTML+=`<div style="font-size:11px;color:var(--t4);text-align:center;padding:8px">${P.length} total pack${q?` · ${list.length} hasil`:''}</div>`;
+}
+function editPack(id){
+  const p=P.find(x=>x.id===id);if(!p)return;
+  const newName=prompt('Nama pack:',p.name);if(!newName)return;
+  p.name=newName.trim();
+  const newDl=prompt('Link download:',p.dlLink||'');
+  if(newDl!==null)p.dlLink=newDl.trim();
+  saveP();renderAll();renderOdPacks();toast('Pack diupdate!','vip');
+}
+async function ownerDeletePack(id){
+  const p=P.find(x=>x.id===id);if(!p)return;
+  if(!confirm(`Hapus "${p.name}"?`))return;
+  P=P.filter(x=>x.id!==id);await saveP();renderAll();renderOdPacks();toast('Pack dihapus','err');
+}
+
+// ════ BAN/USERS ════
+let BANNED=new Set();
+function loadBanned(){try{BANNED=new Set(JSON.parse(localStorage.getItem('mc-banned')||'[]'))}catch{BANNED=new Set()}}
+function saveBanned(){localStorage.setItem('mc-banned',JSON.stringify([...BANNED]))}
+function isBanned(name){return BANNED.has((name||'').toLowerCase())}
+async function banUser(){
+  const name=document.getElementById('banInput')?.value.trim();if(!name){toast('Isi nama user!','err');return}
+  BANNED.add(name.toLowerCase());saveBanned();
+  // Hapus pack kalau dicentang
+  if(document.getElementById('banDelPacks')?.checked){
+    const before=P.length;
+    P=P.filter(p=>p.creator.toLowerCase()!==name.toLowerCase());
+    if(P.length<before){await saveP();renderAll();toast(`${before-P.length} pack dihapus`,'err')}
+  }
+  // Hapus post kalau dicentang
+  if(document.getElementById('banDelPosts')?.checked){
+    const before=posts.length;
+    posts=posts.filter(p=>p.author.toLowerCase()!==name.toLowerCase());
+    if(posts.length<before){await savePosts();renderComm()}
+  }
+  document.getElementById('banInput').value='';
+  renderOdUsers();toast(`🚫 ${name} dibanned!`,'err');
+}
+function unbanUser(name){
+  BANNED.delete(name.toLowerCase());saveBanned();renderOdUsers();toast(`${name} di-unban`);
+}
+function renderOdUsers(){
+  const el=document.getElementById('banList');if(!el)return;
+  const list=[...BANNED];
+  el.innerHTML=list.length?list.map(u=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 9px;background:var(--red2);border-radius:var(--r10);margin-bottom:5px">
+      <div style="display:flex;align-items:center;gap:7px"><span style="font-size:13px">🚫</span><span style="font-size:12.5px;font-weight:700;color:var(--tx)">${esc(u)}</span></div>
+      <button onclick="unbanUser('${u}')" style="padding:3px 9px;background:var(--sf);color:var(--g600);border:1px solid var(--g300);border-radius:var(--r6);font-size:10.5px;font-weight:800;cursor:pointer;font-family:inherit">Unban</button>
+    </div>`).join(''):`<div style="font-size:12px;color:var(--t4);text-align:center;padding:10px">Tidak ada user yang dibanned</div>`;
+  // Load upload limit
+  const ml=document.getElementById('maxUpload');if(ml)ml.value=localStorage.getItem('mc-maxupload')||'';
+}
+function saveUploadLimit(){
+  const v=document.getElementById('maxUpload')?.value.trim();
+  if(v)localStorage.setItem('mc-maxupload',v);
+  else localStorage.removeItem('mc-maxupload');
+  toast('Batas upload disimpan!','vip');
+}
+const getMaxUpload=()=>parseInt(localStorage.getItem('mc-maxupload')||'0')||0;
+
+// ════ BACKUP & RESTORE ════
+let _restoreData=null;
+function renderOdBackup(){
+  const el=document.getElementById('backupInfo');if(!el)return;
+  const totalDl=P.reduce((s,p)=>s+(p.dl||0),0);
+  const size=JSON.stringify({P,posts,vip:[...VIP],lbr:LBR}).length;
+  el.innerHTML=`📦 <strong>${P.length} pack</strong> · ${fN(totalDl)} total download<br>💬 <strong>${posts.length} post forum</strong> · ${posts.reduce((s,p)=>s+(p.comments||[]).length,0)} komentar<br>👑 <strong>${VIP.size} VIP creator</strong><br>📊 Estimasi ukuran: ~${(size/1024).toFixed(1)} KB`;
+}
+function backupJSON(){
+  const data={
+    version:'mcaddn-v5',date:new Date().toISOString(),
+    packs:P,posts,vip:[...VIP],lbr:LBR,
+    settings:JSON.parse(localStorage.getItem('mc-settings')||'{}'),
+    ann:localStorage.getItem('mc-ann')||''
+  };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`mcaddn-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();URL.revokeObjectURL(a.href);
+  toast(`Backup ${P.length} pack berhasil! 💾`,'vip');
+}
+function handleRestore(inp){
+  const f=inp.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    try{
+      const d=JSON.parse(e.target.result);
+      if(!d.packs||!Array.isArray(d.packs)){toast('File backup tidak valid!','err');return}
+      _restoreData=d;
+      const prev=document.getElementById('restorePreview'),btn=document.getElementById('restoreBtn');
+      if(prev){prev.style.display='block';prev.innerHTML=`✅ <strong>File valid!</strong> Berisi:<br>📦 ${d.packs.length} pack · 💬 ${(d.posts||[]).length} post<br>👑 ${(d.vip||[]).length} VIP creator<br>📅 Backup: ${d.date?new Date(d.date).toLocaleDateString('id-ID'):'?'}<br><span style="color:var(--red);font-weight:700">⚠️ Data sekarang akan ditimpa!</span>`}
+      if(btn)btn.style.display='block';
+    }catch{toast('File tidak bisa dibaca!','err')}
+  };r.readAsText(f);
+}
+async function doRestore(){
+  if(!_restoreData){toast('Pilih file backup dulu!','err');return}
+  if(!confirm(`Restore ${_restoreData.packs.length} pack dan ${(_restoreData.posts||[]).length} post? Data sekarang akan ditimpa!`))return;
+  P=_restoreData.packs||[];
+  posts=_restoreData.posts||[];
+  if(_restoreData.vip)VIP=new Set(_restoreData.vip.map(s=>s.toLowerCase()));
+  if(_restoreData.lbr)Object.assign(LBR,_restoreData.lbr);
+  if(_restoreData.settings)localStorage.setItem('mc-settings',JSON.stringify(_restoreData.settings));
+  if(_restoreData.ann)localStorage.setItem('mc-ann',_restoreData.ann);
+  await saveP();await savePosts();await saveVIP();saveLbrData();
+  _restoreData=null;
+  const btn=document.getElementById('restoreBtn'),prev=document.getElementById('restorePreview');
+  if(btn)btn.style.display='none';if(prev)prev.style.display='none';
+  renderAll();renderComm();toast(`✅ Restore berhasil! ${P.length} pack dimuat.`,'vip');
+}
+
+// ════ FORUM LOCK & PENGUMUMAN PER KATEGORI ════
+function lockPost(id){
+  const p=posts.find(x=>x.id===id);if(!p)return;
+  p.locked=!p.locked;savePosts();renderComm();renderOdPending();
+  toast(p.locked?'Diskusi dikunci 🔒':'Diskusi dibuka 🔓',p.locked?'err':'ok');
+}
+function pinPost(id){
+  const p=posts.find(x=>x.id===id);if(!p)return;
+  p.pinned=!p.pinned;savePosts();renderComm();
+  toast(p.pinned?'Post di-pin 📌':'Post di-unpin');
+}
 function getBadge(c){
   if(c.dl>=10000)return`<span style="font-size:10.5px;background:var(--amb2);color:var(--amb);padding:2px 7px;border-radius:3px;font-weight:900;flex-shrink:0">💎 Legend</span>`;
   if(c.dl>=1000)return`<span style="font-size:10.5px;background:var(--g50);color:var(--g700);padding:2px 7px;border-radius:3px;font-weight:900;flex-shrink:0">⭐ Pro</span>`;
@@ -1619,31 +1838,40 @@ async function genDesc(){
 async function submitPack(){
   const name=document.getElementById('fName').value.trim();
   if(!name){toast('Nama pack wajib!','err');return}
-  // Nama creator selalu dari profil — tidak bisa diubah manual
   const cr=UP.name||curUser?.displayName||curUser?.email?.split('@')[0]||'';
   if(!cr){toast('Set nama profil dulu sebelum upload!','err');closeOv('upOv');openProfile();return}
+  // Cek banned
+  if(isBanned(cr)){toast('Akun kamu dibanned dari upload.','err');return}
+  // Cek max upload
+  const maxUp=getMaxUpload();
+  if(maxUp>0){
+    const myCount=P.filter(p=>p.creator.toLowerCase()===cr.toLowerCase()).length;
+    if(myCount>=maxUp){toast(`Batas upload ${maxUp} pack sudah tercapai!`,'err');return}
+  }
   if(SS.dlRequired&&!document.getElementById('fDl').value.trim()){toast('Link download wajib diisi!','err');return}
   if(SS.aiRequired&&!document.getElementById('fDesc').value.trim()){toast('Wajib generate AI deskripsi dulu!','err');return}
   const btn=document.getElementById('upBtn');btn.disabled=true;btn.classList.add('ld');
-  const galRaw=document.getElementById('fGallery')?.value||'';
-  const gallery=galRaw.split(',').map(s=>s.trim()).filter(s=>s.startsWith('http')).slice(0,5);
-  const pk={
-    id:'p'+Date.now()+Math.random().toString(36).slice(2,5),
-    name,cat:document.getElementById('fCat').value,creator:cr,
-    group:document.getElementById('fGroup').value.trim(),
-    desc:document.getElementById('fDesc').value.trim(),
-    tags:[...tags],vers:[...vers],img:IMG,gallery,
-    dlLink:document.getElementById('fDl').value.trim(),
-    version:document.getElementById('fVer').value.trim(),
-    size:document.getElementById('fSize').value.trim(),
-    youtube:ytId(document.getElementById('fYT')?.value||''),
-    dl:0,likes:0,ratings:{},comments:[],
-    pendingReview:!isOwner&&SS.requireApproval,
-    uid:curUser?.uid||'guest',ts:Date.now()
-  };
-  P.unshift(pk);await saveP();closeOv('upOv');renderAll();
-  if(isOwner)toast(isVip(pk)?`👑 "${name}" dipublish sebagai VIP!`:`"${name}" berhasil dipublish!`,isVip(pk)?'vip':'ok');
-  else toast(`"${name}" dikirim untuk review owner!`);
+  try{
+    const galRaw=document.getElementById('fGallery')?.value||'';
+    const gallery=galRaw.split(',').map(s=>s.trim()).filter(s=>s.startsWith('http')).slice(0,5);
+    const pk={
+      id:'p'+Date.now()+Math.random().toString(36).slice(2,5),
+      name,cat:document.getElementById('fCat').value,creator:cr,
+      group:document.getElementById('fGroup').value.trim(),
+      desc:document.getElementById('fDesc').value.trim(),
+      tags:[...tags],vers:[...vers],img:IMG,gallery,
+      dlLink:document.getElementById('fDl').value.trim(),
+      version:document.getElementById('fVer').value.trim(),
+      size:document.getElementById('fSize').value.trim(),
+      youtube:ytId(document.getElementById('fYT')?.value||''),
+      dl:0,likes:0,ratings:{},comments:[],
+      pendingReview:!isOwner&&SS.requireApproval,
+      uid:curUser?.uid||'guest',ts:Date.now()
+    };
+    P.unshift(pk);await saveP();closeOv('upOv');renderAll();
+    if(isOwner)toast(isVip(pk)?`👑 "${name}" dipublish sebagai VIP!`:`"${name}" berhasil dipublish!`,isVip(pk)?'vip':'ok');
+    else toast(`"${name}" dikirim untuk review owner!`);
+  }catch(e){toast('Gagal upload: '+e.message,'err')}
   btn.disabled=false;btn.classList.remove('ld');
 }
 
@@ -1682,7 +1910,13 @@ async function aiSend(preset){
 
 // ════ COMMUNITY ════
 function renderComm(){
-  const approved=posts.filter(p=>p.approved&&(pcat==='all'||p.cat===pcat)).sort((a,b)=>b.ts-a.ts);
+  const approved=posts.filter(p=>p.approved&&(pcat==='all'||p.cat===pcat))
+    .sort((a,b)=>{
+      // Pinned muncul duluan
+      if(b.pinned&&!a.pinned)return 1;
+      if(a.pinned&&!b.pinned)return -1;
+      return b.ts-a.ts;
+    });
   const totalC=posts.reduce((s,p)=>s+(p.comments||[]).length,0);
   const fp=document.getElementById('fPs');if(fp)fp.textContent=posts.filter(p=>p.approved).length;
   const fc=document.getElementById('fCs');if(fc)fc.textContent=totalC;
@@ -1711,7 +1945,9 @@ function postCard(p){
     <div style="display:flex;align-items:center;gap:3px">
       <button class="pact${lk?' liked':''}" onclick="togPLike(event,'${p.id}')">${si(lk?'i-heart-f':'i-heart',12)} ${p.likes||0}</button>
       <button class="pact">${si('i-comm',12)} ${(p.comments||[]).length}</button>
-      ${isOwner?`<button class="pact" style="color:var(--red)" onclick="event.stopPropagation();delPost('${p.id}')">${si('i-x',11)} Hapus</button>`:''}
+      ${p.locked?`<span style="font-size:10px;color:var(--amb);font-weight:800;padding:2px 5px">🔒 Dikunci</span>`:''}
+      ${p.pinned?`<span style="font-size:10px;color:var(--amb);font-weight:800;padding:2px 5px">📌</span>`:''}
+      ${isOwner?`<button class="pact" onclick="event.stopPropagation();lockPost('${p.id}')" title="${p.locked?'Buka':'Kunci'}">${p.locked?'🔓':'🔒'}</button><button class="pact" onclick="event.stopPropagation();pinPost('${p.id}')" title="${p.pinned?'Unpin':'Pin'}">📌</button><button class="pact" style="color:var(--red)" onclick="event.stopPropagation();delPost('${p.id}')">${si('i-x',11)} Hapus</button>`:''}
     </div>
   </div>`;
 }
@@ -1723,7 +1959,7 @@ function openPost(id){
     <div style="padding:14px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
       <div style="display:flex;align-items:center;gap:7px;flex:1;min-width:0">
         <div class="postav">${p.authorPhoto?`<img src="${p.authorPhoto}">`:''}${!p.authorPhoto?ini(p.author):''}</div>
-        <div style="min-width:0"><div style="font-size:12px;font-weight:800;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.author)}</div><div style="font-size:10px;color:var(--t4)">${ago(p.ts)} · <span style="background:${cb[p.cat]||'#f3f4f6'};color:${cc2[p.cat]||'#6b7280'};padding:1px 5px;border-radius:3px;font-size:9px;font-weight:900">${PCAT[p.cat]||p.cat}</span></div></div>
+        <div style="min-width:0"><div style="font-size:12px;font-weight:800;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.author)}${p.pinned?' 📌':''}</div><div style="font-size:10px;color:var(--t4)">${ago(p.ts)} · <span style="background:${cb[p.cat]||'#f3f4f6'};color:${cc2[p.cat]||'#6b7280'};padding:1px 5px;border-radius:3px;font-size:9px;font-weight:900">${PCAT[p.cat]||p.cat}</span>${p.locked?` <span style="background:var(--amb2);color:var(--amb);padding:1px 5px;border-radius:3px;font-size:9px;font-weight:900">🔒 Dikunci</span>`:''}</div></div>
       </div>
       <button class="xbtn" onclick="closeOv('pdOv')">${si('i-x',12)}</button>
     </div>
@@ -1735,7 +1971,10 @@ function openPost(id){
     </div>
     <div style="padding:11px 16px 15px;border-top:1px solid var(--bd);flex-shrink:0">
       ${!curUser?`<input type="text" id="pdName" placeholder="Nama kamu..." style="width:100%;background:var(--bg2);border:1.5px solid var(--bd);border-radius:var(--r10);padding:6px 9px;font-size:12.5px;color:var(--tx);margin-bottom:6px;font-family:inherit">`:''}
-      <div class="cmtrow"><textarea class="cmtin" id="pdCmtTxt" placeholder="Tulis komentar..." rows="2" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();addCmt('${id}')}"></textarea><button class="cmtsend" onclick="addCmt('${id}')">${si('i-send',13)}</button></div>
+      ${p.locked&&!isOwner
+        ?`<div style="background:var(--amb2);border:1px solid #fcd34d;border-radius:var(--r10);padding:9px 12px;font-size:12px;font-weight:700;color:var(--amb);text-align:center">🔒 Diskusi ini dikunci — komentar dinonaktifkan</div>`
+        :`<div class="cmtrow"><textarea class="cmtin" id="pdCmtTxt" placeholder="Tulis komentar..." rows="2" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();addCmt('${id}')}"></textarea><button class="cmtsend" onclick="addCmt('${id}')">${si('i-send',13)}</button></div>`
+      }
     </div>`;
   openOv('pdOv');
 }
@@ -1748,6 +1987,7 @@ async function addCmt(postId){
   const nEl=document.getElementById('pdName');
   const author=curUser?.displayName||curUser?.email?.split('@')[0]||UP.name||nEl?.value.trim()||'Anonim';
   const p=posts.find(x=>x.id===postId);if(!p)return;
+  if(p.locked&&!isOwner){toast('Diskusi ini dikunci 🔒','err');return}
   if(!p.comments)p.comments=[];
   p.comments.push({id:'c'+Date.now(),author,authorPhoto:curUser?.photoURL||UP._local||'',text:txt,ts:Date.now()});
   await savePosts();document.getElementById('pdCmtTxt').value='';
@@ -1765,6 +2005,8 @@ function openNewPost(){openOv('npOv')}
 async function submitPost(){
   const title=document.getElementById('npTitle').value.trim(),body=document.getElementById('npBody').value.trim();
   if(!title){toast('Isi judul!','err');return}if(!body){toast('Isi konten!','err');return}
+  const author=curUser?.displayName||curUser?.email?.split('@')[0]||UP.name||'Anonim';
+  if(isBanned(author)){toast('Akun kamu dibanned dari forum.','err');return}
   const btn=document.getElementById('npBtn');btn.disabled=true;btn.classList.add('ld');
   // AI moderation jika diaktifkan di settings
   if(CFG.GROQ&&!isOwner&&SS.aiModerate){
@@ -1774,7 +2016,6 @@ async function submitPost(){
       btn.disabled=false;btn.classList.remove('ld');return;
     }
   }
-  const author=curUser?.displayName||curUser?.email?.split('@')[0]||UP.name||'Anonim';
   posts.unshift({id:'post'+Date.now()+Math.random().toString(36).slice(2,4),author,authorPhoto:curUser?.photoURL||UP._local||'',title,body,cat:document.getElementById('npCat').value,approved:isOwner,likes:0,comments:[],uid:curUser?.uid||'',ts:Date.now()});
   await savePosts();closeOv('npOv');
   document.getElementById('npTitle').value='';document.getElementById('npBody').value='';
@@ -1941,7 +2182,7 @@ function clearAnn(){
 // ════ OWNER DASHBOARD ════
 function openODash(){if(!isOwner){toast('Login owner dulu!','err');return}odSw(0);renderOdOverview();openOv('odOv')}
 function odSw(n){
-  for(let i=0;i<5;i++){
+  for(let i=0;i<8;i++){
     document.getElementById(`odt${i}`)?.classList.toggle('on',i===n);
     const p=document.getElementById(`odp${i}`);if(p)p.classList.toggle('on',i===n);
   }
@@ -1949,7 +2190,10 @@ function odSw(n){
   if(n===1)renderOdPending();
   if(n===2)renderOdVIP();
   if(n===3)renderLbr();
-  if(n===4)renderOdSettings();
+  if(n===4)renderOdPacks();
+  if(n===5)renderOdUsers();
+  if(n===6)renderOdBackup();
+  if(n===7)renderOdSettings();
 }
 function renderOdOverview(){
   const dl=P.reduce((s,p)=>s+(p.dl||0),0),lk=P.reduce((s,p)=>s+(p.likes||0),0),pend=posts.filter(p=>!p.approved).length;
@@ -2226,6 +2470,7 @@ window.addEventListener('ac',e=>{
   loadLbr();
   loadBranding();
   loadSiteSettings();
+  loadBanned();
   // Hapus key lama mcaddn-groq-key supaya tidak override key baru
   if(localStorage.getItem('mcaddn-groq-key')&&localStorage.getItem('mc-groq')){
     localStorage.removeItem('mcaddn-groq-key');
