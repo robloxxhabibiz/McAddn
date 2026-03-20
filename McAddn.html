@@ -9,7 +9,7 @@
 <script type="module">
 import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import{getAuth,signInWithPopup,signInWithRedirect,getRedirectResult,signOut,onAuthStateChanged,GoogleAuthProvider,GithubAuthProvider}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-const FB={apiKey:"AIzaSyD3Yz2jyBkWnRqFQgrOi3tWIn_UpEXAEPA",authDomain:"mcaddn.firebaseapp.com",projectId:"mcaddn",storageBucket:"mcaddn.firebasestorage.app",messagingSenderId:"229803949526",appId:"1:229803949526:web:c54462fe7007ddff77b877"};
+const FB={apiKey:"ini api key",authDomain:"mcaddn.firebaseapp.com",projectId:"mcaddn",storageBucket:"mcaddn.firebasestorage.app",messagingSenderId:"229803949526",appId:"ini app id"};
 const isPopupBrowser=()=>/Chrome/i.test(navigator.userAgent)&&!/SamsungBrowser|FBAV|Instagram|GSA/i.test(navigator.userAgent);
 const needsRedirect=()=>/SamsungBrowser|FBAV|Instagram|GSA|WebView/i.test(navigator.userAgent)||(!/Chrome/i.test(navigator.userAgent)&&/Android/i.test(navigator.userAgent));
 try{
@@ -778,8 +778,8 @@ img{display:block;max-width:100%}
         </div>
         <div class="sblk">
           <div class="stitle">⬆️ Restore dari JSON</div>
-          <div class="imgdrop" style="min-height:60px" id="restoreDrop">
-            <input type="file" accept=".json" id="restoreFile" onchange="handleRestore(this)">
+          <div class="imgdrop" style="min-height:60px;cursor:pointer" id="restoreDrop" onclick="document.getElementById('restoreFile').click()">
+            <input type="file" accept=".json" id="restoreFile" style="display:none" onchange="handleRestore(this)">
             <div style="padding:14px;text-align:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="margin:0 auto 6px"><path d="M12 15V3M9 12l3 3 3-3" stroke="var(--g600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 18H4a2 2 0 01-2-2v-2M19 18h1a2 2 0 002-2v-2" stroke="var(--g600)" stroke-width="1.5" stroke-linecap="round"/></svg><p style="font-size:11.5px;color:var(--t3)">Klik atau drag file <strong style="color:var(--g600)">.json</strong> backup</p></div>
           </div>
           <div id="restorePreview" style="display:none;margin-top:8px;background:var(--g50);border:1px solid var(--g200);border-radius:var(--r10);padding:9px 11px;font-size:12px;color:var(--t2);line-height:1.7"></div>
@@ -904,7 +904,7 @@ const CFG={
   OWNER:'KingGG',MODEL:'llama-3.3-70b-versatile',
   get DB_URL(){return localStorage.getItem('mc-dburl')||localStorage.getItem('mcaddn-db-url')||'https://game-spaniel-72287.upstash.io'},
   get DB_TOK(){return localStorage.getItem('mc-dbtok')||localStorage.getItem('mcaddn-db-token')||'gQAAAAAAARpfAAIncDE0OGM2YjVkN2JkY2U0ZTczOGZhNjNkODIxOWEyZWMzN3AxNzIyODc'},
-  get GROQ(){return localStorage.getItem('mc-groq')||''},
+  get GROQ(){return localStorage.getItem('mc-groq')||'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'},
 };
 let P=[],LIKES=new Set(),BKS=new Set(),RATS={},FT=new Set(),VIP=new Set();
 let posts=[],PLIKES=new Set(),pcat='all';
@@ -981,7 +981,10 @@ async function upCmd(...a){
   return(await r.json()).result;
 }
 async function dbGet(k){try{const r=await upCmd('GET','mcaddn:'+k);return r?JSON.parse(r):null}catch{return null}}
-async function dbSet(k,v){try{await upCmd('SET','mcaddn:'+k,JSON.stringify(v))}catch{}}
+async function dbSet(k,v){
+  const r=await upCmd('SET','mcaddn:'+k,JSON.stringify(v));
+  return r;
+}
 
 async function loadPacks(){
   LIKES=new Set(JSON.parse(localStorage.getItem('mc-lk')||'[]'));
@@ -1000,7 +1003,31 @@ async function loadPacks(){
   loadPacksLocal();
 }
 function loadPacksLocal(){try{P=JSON.parse(localStorage.getItem('mc-packs')||'[]');if(!Array.isArray(P))P=[]}catch{P=[]}}
-async function saveP(){localStorage.setItem('mc-packs',JSON.stringify(P));if(isDB())await dbSet('packs',P)}
+async function saveP(){
+  let dbOk=false;
+  // Simpan ke DB dulu (prioritas)
+  if(isDB()){
+    try{
+      // Strip base64 images sebelum kirim ke DB (terlalu besar)
+      const dbData=P.map(p=>({...p,img:p.img?.startsWith('data:')?'':p.img}));
+      await dbSet('packs',dbData);
+      dbOk=true;
+    }catch(e){console.warn('DB save error:',e.message)}
+  }
+  // Simpan ke localStorage
+  try{
+    localStorage.setItem('mc-packs',JSON.stringify(P));
+  }catch(e){
+    try{
+      const slim=P.map(p=>({...p,img:p.img?.startsWith('data:')?'':p.img}));
+      localStorage.setItem('mc-packs',JSON.stringify(slim));
+    }catch(e2){
+      localStorage.removeItem('mc-packs');
+      try{localStorage.setItem('mc-packs','[]')}catch{}
+    }
+  }
+  return dbOk;
+}
 async function saveFT(){const a=[...FT];localStorage.setItem('mc-ft',JSON.stringify(a));if(isDB())await dbSet('ft',a)}
 
 async function loadVIP(){
@@ -1160,14 +1187,18 @@ function mNav(p,el){
   document.querySelectorAll('.mbitem').forEach(b=>{b.classList.remove('on');const s=b.querySelector('svg');if(s)s.style.color='var(--t4)'});
   if(el){el.classList.add('on');const s=el.querySelector('svg');if(s)s.style.color='var(--g600)'}
   const mm=document.getElementById('mmain'),mc=document.getElementById('mcomm'),mvb=document.getElementById('mvb'),mp=document.getElementById('mProfil');
+  const mcats=document.getElementById('mcats'),msort=document.getElementById('msort'),msh=document.getElementById('msh');
   // hide all
   if(mm)mm.style.display='none';if(mc)mc.style.display='none';if(mp)mp.style.display='none';
   if(mvb)mvb.style.display='none';
   if(p==='comm'){
+    if(mcats)mcats.style.display='none';if(msort)msort.style.display='none';if(msh)msh.style.display='none';
     if(mc)mc.style.display='block';pg='comm';renderComm();
   }else if(p==='profil'){
+    if(mcats)mcats.style.display='none';if(msort)msort.style.display='none';if(msh)msh.style.display='none';
     if(mp)mp.style.display='block';renderMProfil();
   }else{
+    if(mcats)mcats.style.display='';if(msort)msort.style.display='';if(msh)msh.style.display='';
     if(mm)mm.style.display='block';if(mvb)mvb.style.display=P.some(x=>isVip(x))?'flex':'none';
     pg='packs';
     if(p==='trend'){srt='pop';setSort('pop')}
@@ -1209,7 +1240,27 @@ async function mOwnerLogin2(){
   renderMProfil();toast('Selamat datang, KingGG! 👑','vip');
 }
 
-// ════ FILTER & RENDER ════
+// Compress gambar base64 sebelum disimpan (max ~200KB)
+async function compressImg(base64,maxKB=200){
+  return new Promise(res=>{
+    const img=new Image();
+    img.onload=()=>{
+      const canvas=document.createElement('canvas');
+      let w=img.width,h=img.height;
+      // Scale down kalau terlalu besar
+      const maxDim=800;
+      if(w>maxDim||h>maxDim){const r=Math.min(maxDim/w,maxDim/h);w=Math.round(w*r);h=Math.round(h*r)}
+      canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      // Compress dengan quality turun sampai ukuran OK
+      let q=0.85,result=canvas.toDataURL('image/jpeg',q);
+      while(result.length>maxKB*1024*1.37&&q>0.3){q-=0.1;result=canvas.toDataURL('image/jpeg',q)}
+      res(result);
+    };
+    img.onerror=()=>res(base64);
+    img.src=base64;
+  });
+}
 function initChips(){
   const cats=[{k:'all',i:'i-grid',n:'Semua'},...Object.entries(CAT).map(([k,v])=>({k,i:v.i,n:v.n}))];
   const sorts=[{k:'new',n:'Terbaru',i:'i-spark'},{k:'pop',n:'Terpopuler',i:'i-trend'},{k:'like',n:'Disukai',i:'i-heart'},{k:'rated',n:'Rating',i:'i-star'},{k:'bk',n:'Tersimpan',i:'i-box'},{k:'az',n:'A–Z',i:'i-list'}];
@@ -1853,12 +1904,17 @@ async function submitPack(){
   try{
     const galRaw=document.getElementById('fGallery')?.value||'';
     const gallery=galRaw.split(',').map(s=>s.trim()).filter(s=>s.startsWith('http')).slice(0,5);
+    // Compress gambar kalau base64
+    let packImg=IMG;
+    if(IMG&&IMG.startsWith('data:')){
+      try{packImg=await compressImg(IMG,200)}catch{packImg=IMG}
+    }
     const pk={
       id:'p'+Date.now()+Math.random().toString(36).slice(2,5),
       name,cat:document.getElementById('fCat').value,creator:cr,
       group:document.getElementById('fGroup').value.trim(),
       desc:document.getElementById('fDesc').value.trim(),
-      tags:[...tags],vers:[...vers],img:IMG,gallery,
+      tags:[...tags],vers:[...vers],img:packImg,gallery,
       dlLink:document.getElementById('fDl').value.trim(),
       version:document.getElementById('fVer').value.trim(),
       size:document.getElementById('fSize').value.trim(),
@@ -1867,9 +1923,16 @@ async function submitPack(){
       pendingReview:!isOwner&&SS.requireApproval,
       uid:curUser?.uid||'guest',ts:Date.now()
     };
-    P.unshift(pk);await saveP();closeOv('upOv');renderAll();
-    if(isOwner)toast(isVip(pk)?`👑 "${name}" dipublish sebagai VIP!`:`"${name}" berhasil dipublish!`,isVip(pk)?'vip':'ok');
-    else toast(`"${name}" dikirim untuk review owner!`);
+    P.unshift(pk);
+    const dbOk=await saveP();
+    closeOv('upOv');renderAll();
+    if(isOwner){
+      if(!dbOk&&isDB())toast(`"${name}" tersimpan lokal saja — DB gagal, refresh mungkin hilang! ⚠️`,'err');
+      else toast(isVip(pk)?`👑 "${name}" dipublish sebagai VIP!`:`"${name}" berhasil dipublish!`,isVip(pk)?'vip':'ok');
+    }else{
+      if(!dbOk&&isDB())toast(`"${name}" tersimpan lokal saja — DB gagal ⚠️`,'err');
+      else toast(`"${name}" dikirim untuk review owner!`);
+    }
   }catch(e){toast('Gagal upload: '+e.message,'err')}
   btn.disabled=false;btn.classList.remove('ld');
 }
@@ -1952,6 +2015,9 @@ function postCard(p){
 }
 function openPost(id){
   const p=posts.find(x=>x.id===id);if(!p)return;
+  // Tutup modal lama kalau masih terbuka
+  const existing=document.getElementById('pdOv');
+  if(existing&&existing.style.display==='flex')closeOv('pdOv');
   const cc2={'diskusi':'#15803d','showcase':'#1d4ed8','bantuan':'#b45309','ide':'#7c3aed','bug':'#dc2626'};
   const cb={'diskusi':'#dcfce7','showcase':'#dbeafe','bantuan':'#fef3c7','ide':'#ede9fe','bug':'#fee2e2'};
   document.getElementById('pdModal').innerHTML=`
@@ -2093,6 +2159,7 @@ function saveProfile(){
   if(UP.link)localStorage.setItem('mc-clink-'+cname,UP.link);
   const photo=getP();if(photo)localStorage.setItem('mc-cpic-'+cname,photo);
   closeOv('profOv');renderAuth();renderAll();
+  if(document.getElementById('mProfil')?.style.display==='block')renderMProfil();
   toast(!nameChanged?'Profil disimpan!':'Nama diubah — semua pack ikut update! ✓','vip');
 }
 
