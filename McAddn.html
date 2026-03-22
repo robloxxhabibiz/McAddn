@@ -9,7 +9,7 @@
 <script type="module">
 import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import{getAuth,signInWithPopup,signInWithRedirect,getRedirectResult,signOut,onAuthStateChanged,GoogleAuthProvider,GithubAuthProvider}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-const FB={apiKey:"AIzaSyD3Yz2jyBkWnRqFQgrOi3tWIn_UpEXAEPA",authDomain:"mcaddn.firebaseapp.com",projectId:"mcaddn",storageBucket:"mcaddn.firebasestorage.app",messagingSenderId:"229803949526",appId:"1:229803949526:web:c54462fe7007ddff77b877"};
+const FB={apiKey:"apik",authDomain:"mcaddn.firebaseapp.com",projectId:"mcaddn",storageBucket:"mcaddn.firebasestorage.app",messagingSenderId:"229803949526",appId:"apid"};
 const isPopupBrowser=()=>/Chrome/i.test(navigator.userAgent)&&!/SamsungBrowser|FBAV|Instagram|GSA/i.test(navigator.userAgent);
 const needsRedirect=()=>/SamsungBrowser|FBAV|Instagram|GSA|WebView/i.test(navigator.userAgent)||(!/Chrome/i.test(navigator.userAgent)&&/Android/i.test(navigator.userAgent));
 try{
@@ -701,7 +701,25 @@ img{display:block;max-width:100%}
       <div class="itabs"><button class="itab on" id="itUrl" onclick="switchIT('url')">🔗 Link URL</button><button class="itab" id="itFile" onclick="switchIT('file')">📁 Upload File</button><button class="itab" id="itImgBB" onclick="switchIT('imgbb')">☁️ ImgBB</button></div>
       <div id="itUrlMode"><div style="position:relative"><input type="text" class="fi" id="imgUrlIn" placeholder="https://i.imgur.com/xxx.jpg..." oninput="prevUrl(this.value)" style="padding-right:70px"><button onclick="prevUrl(document.getElementById('imgUrlIn').value)" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);padding:3px 8px;background:var(--g600);color:white;border:none;border-radius:var(--r6);font-size:11px;font-weight:800;cursor:pointer">Preview</button></div><p style="font-size:10.5px;color:var(--t4);margin-top:4px;line-height:1.5">💡 Hosting gratis: <a href="https://imgbb.com" target="_blank" style="color:var(--g600);font-weight:700">ImgBB</a> · <a href="https://imgur.com" target="_blank" style="color:var(--g600);font-weight:700">Imgur</a></p><div id="urlPvBox" style="display:none;margin-top:6px;position:relative"><img id="urlPvImg" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:var(--r10);background:var(--bg2);display:block"><button onclick="clearUrl()" style="position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:var(--r6);background:rgba(0,0,0,.65);border:none;color:white;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center">×</button><div id="urlSt" style="position:absolute;bottom:6px;left:6px;font-size:10px;font-weight:800;padding:2px 6px;border-radius:var(--r4)"></div></div></div>
       <div id="itFileMode" style="display:none"><div class="imgdrop"><input type="file" accept="image/*" id="imgFile" onchange="handleImg(this)"><div id="iph" style="padding:16px;text-align:center"><svg width="32" height="32" viewBox="0 0 64 64" fill="none" style="margin:0 auto"><rect x="4" y="12" width="56" height="40" rx="4" fill="var(--g100)" stroke="var(--g300)" stroke-width="2"/><circle cx="20" cy="28" r="6" fill="var(--g200)"/><path d="M4 42l16-12 12 10 8-8 20 16" stroke="var(--g400)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><p style="font-size:11px;color:var(--t3);margin-top:6px;line-height:1.5">Klik atau drag gambar<br><strong style="color:var(--g600)">JPG · PNG · WebP</strong> · Maks 5MB</p></div><div class="ipw" id="ipw" style="display:none"><img id="iprev"><button class="irm" onclick="rmImg(event)"><svg width="10" height="10"><use href="#i-x"/></svg></button></div></div></div>
-      <div id="itImgBBMode" style="display:none"><div class="imgdrop"><input type="file" accept="image/*" id="imgBBFile" onchange="handleImgBB(this)"><div id="imgBBPh" style="padding:16px;text-align:center"><div style="font-size:22px;margin-bottom:6px">☁️</div><p style="font-size:12px;font-weight:800;color:var(--tx)">Upload langsung ke ImgBB</p><p style="font-size:10.5px;color:var(--t3);margin-top:4px;line-height:1.5">Otomatis dapat link permanen · Maks 5MB</p><p style="font-size:10px;color:var(--t4);margin-top:5px">Butuh API key ImgBB di Owner Dashboard → Settings</p></div><div id="imgBBUpload" style="display:none;padding:14px;text-align:center"><div class="spin" style="display:block;margin:0 auto 8px;border-color:rgba(22,163,74,.3);border-top-color:var(--g600);width:20px;height:20px"></div><p style="font-size:12px;color:var(--t3)">Mengupload ke ImgBB...</p></div><div id="imgBBDone" style="display:none;position:relative"><img id="imgBBPrev" style="width:100%;aspect-ratio:16/9;object-fit:cover;display:block"><button onclick="clearImgBB()" style="position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:var(--r6);background:rgba(0,0,0,.65);border:none;color:white;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center">×</button><div style="position:absolute;bottom:6px;left:6px;font-size:10px;font-weight:800;padding:2px 6px;border-radius:var(--r4);background:var(--g600);color:white">✓ Uploaded ke ImgBB</div></div></div></div>
+      <div id="itImgBBMode" style="display:none">
+        <!-- File input terpisah, tidak overlap dengan spinner/done -->
+        <input type="file" accept="image/*" id="imgBBFile" style="display:none" onchange="handleImgBB(this)">
+        <div id="imgBBPh" style="border:2px dashed var(--bd2);border-radius:var(--r14);padding:16px;text-align:center;cursor:pointer;transition:.18s" onclick="document.getElementById('imgBBFile').click()" onmouseover="this.style.borderColor='var(--g400)'" onmouseout="this.style.borderColor='var(--bd2)'">
+          <div style="font-size:22px;margin-bottom:6px">☁️</div>
+          <p style="font-size:12px;font-weight:800;color:var(--tx)">Upload langsung ke ImgBB</p>
+          <p style="font-size:10.5px;color:var(--t3);margin-top:4px;line-height:1.5">Klik untuk pilih gambar · Maks 5MB</p>
+          <p style="font-size:10px;color:var(--t4);margin-top:5px">Butuh API key ImgBB di Owner Dashboard → Settings</p>
+        </div>
+        <div id="imgBBUpload" style="display:none;border:2px dashed var(--bd2);border-radius:var(--r14);padding:20px;text-align:center">
+          <div class="spin" style="display:block;margin:0 auto 8px;border-color:rgba(22,163,74,.3);border-top-color:var(--g600);width:20px;height:20px"></div>
+          <p style="font-size:12px;color:var(--t3)">Mengupload ke ImgBB...</p>
+        </div>
+        <div id="imgBBDone" style="display:none;position:relative;border-radius:var(--r14);overflow:hidden">
+          <img id="imgBBPrev" style="width:100%;aspect-ratio:16/9;object-fit:cover;display:block">
+          <button onclick="clearImgBB()" style="position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:var(--r6);background:rgba(0,0,0,.65);border:none;color:white;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;z-index:10">×</button>
+          <div style="position:absolute;bottom:6px;left:6px;font-size:10px;font-weight:800;padding:2px 6px;border-radius:var(--r4);background:var(--g600);color:white">✓ Uploaded ke ImgBB</div>
+        </div>
+      </div>
       <div style="margin-top:11px"><div class="fsep"><svg width="9" height="9"><use href="#i-box"/></svg> Informasi Pack</div>
       <div class="frow"><div class="fg"><label class="fl">Nama Pack <span class="req">*</span></label><input type="text" class="fi" id="fName" placeholder="Contoh: Ultra Shader Pro"></div><div class="fg"><label class="fl">Kategori <span class="req">*</span></label><select class="fsel" id="fCat"><option value="addon">Add-on</option><option value="texture">Texture Pack</option><option value="map">Map / Dunia</option><option value="skin">Skin Pack</option><option value="shader">Shader</option><option value="mod">Mod</option></select></div></div>
       <div class="frow"><div class="fg"><label class="fl">Nama Creator <span style="font-size:9.5px;background:var(--g50);color:var(--g700);padding:1px 5px;border-radius:3px;font-weight:800">🔒 dari profil</span></label><div style="position:relative"><input type="text" class="fi" id="fCreator" placeholder="Set nama di profil dulu..." readonly style="background:var(--bg2);cursor:not-allowed;padding-right:80px"><button onclick="closeOv('upOv');openProfile()" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);padding:3px 8px;background:var(--g600);color:white;border:none;border-radius:var(--r6);font-size:11px;font-weight:800;cursor:pointer" id="fCreatorEditBtn">Edit Profil</button></div><p id="fCreatorNote" style="font-size:10px;color:var(--t4);margin-top:3px;line-height:1.5;display:none">⚠️ Belum ada nama profil. <span onclick="closeOv('upOv');openProfile()" style="color:var(--g600);font-weight:700;cursor:pointer">Set nama dulu →</span></p></div><div class="fg"><label class="fl">Grup / Studio</label><input type="text" class="fi" id="fGroup" placeholder="Opsional"></div></div>
@@ -873,6 +891,8 @@ img{display:block;max-width:100%}
 
       <!-- Settings -->
       <div class="od-panel" id="odp7">
+        <!-- Setup Guide - muncul kalau credentials belum diisi -->
+        <div id="setupGuide" style="display:none"></div>
         <!-- Owner Profile -->
         <div class="sblk"><div class="stitle">👑 Profil Owner</div>
           <div class="frow"><div class="fg"><label class="fl">Nama Owner</label><input type="text" class="fi" id="setOwnerName" placeholder="KingGG"></div><div class="fg"><label class="fl">Nama Platform</label><input type="text" class="fi" id="sSiteName" placeholder="MCAddn"></div></div>
@@ -888,7 +908,8 @@ img{display:block;max-width:100%}
         <!-- API Keys -->
         <div class="sblk"><div class="stitle">🔌 API Keys</div>
           <div class="fg"><label class="fl">Upstash URL <span id="dbSt" style="font-size:10px;margin-left:5px;font-weight:700"></span></label><input type="text" class="fi" id="odDbUrl" placeholder="https://xxx.upstash.io" style="margin-bottom:6px"><label class="fl">Token</label><div style="display:flex;gap:5px"><input type="password" class="fi" id="odDbTok" placeholder="Token Upstash..." style="flex:1"><button id="dbTestBtn" onclick="upTest()" style="padding:7px 10px;background:var(--blu2);color:var(--blu);border:none;border-radius:var(--r10);font-size:11.5px;font-weight:800;cursor:pointer;flex-shrink:0;font-family:inherit;white-space:nowrap">Tes Koneksi</button></div><button onclick="clearDBKey()" style="margin-top:4px;padding:3px 8px;background:none;border:none;font-size:10.5px;color:var(--red);cursor:pointer;font-family:inherit">✕ Hapus DB Keys</button></div>
-          <div class="fg"><label class="fl">ImgBB API Key <span style="font-size:10px;font-weight:400;color:var(--t4)">— untuk auto upload gambar</span></label><div style="display:flex;gap:5px"><input type="text" class="fi" id="odImgBB" placeholder="Dapatkan di api.imgbb.com" style="flex:1"><button onclick="clearImgBBKey()" style="padding:7px 10px;background:var(--bg2);border:1.5px solid var(--bd);border-radius:var(--r10);font-size:11px;font-weight:700;color:var(--red);cursor:pointer;flex-shrink:0;font-family:inherit">✕</button></div><p style="font-size:10px;color:var(--t4);margin-top:3px">Gratis di <a href="https://api.imgbb.com" target="_blank" style="color:var(--g600);font-weight:700">api.imgbb.com</a> — unlimited upload!</p></div><div style="display:flex;gap:5px"><input type="password" class="fi" id="odGroq" placeholder="gsk_..." style="flex:1"><button id="groqVisBtn" onclick="toggleGroqVis()" style="padding:7px 9px;background:var(--bg2);border:1.5px solid var(--bd);border-radius:var(--r10);cursor:pointer;font-size:13px;flex-shrink:0">👁️</button></div><div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px"><p style="font-size:10px;color:var(--t4);line-height:1.5">Gratis di <a href="https://console.groq.com" target="_blank" style="color:var(--g600);font-weight:700">console.groq.com</a></p><button onclick="clearGroqKey()" style="padding:3px 8px;background:none;border:none;font-size:10.5px;color:var(--red);cursor:pointer;font-family:inherit">✕ Hapus Key</button></div></div>
+          <div class="fg"><label class="fl">Groq AI Key <span id="aiSt" style="font-size:10px;margin-left:5px;font-weight:700"></span></label><div style="display:flex;gap:5px"><input type="password" class="fi" id="odGroq" placeholder="gsk_..." style="flex:1"><button id="groqVisBtn" onclick="toggleGroqVis()" style="padding:7px 9px;background:var(--bg2);border:1.5px solid var(--bd);border-radius:var(--r10);cursor:pointer;font-size:13px;flex-shrink:0">👁️</button></div><div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px"><p style="font-size:10px;color:var(--t4);line-height:1.5">Gratis di <a href="https://console.groq.com" target="_blank" style="color:var(--g600);font-weight:700">console.groq.com</a></p><button onclick="clearGroqKey()" style="padding:3px 8px;background:none;border:none;font-size:10.5px;color:var(--red);cursor:pointer;font-family:inherit">✕ Hapus Key</button></div></div>
+          <div class="fg"><label class="fl">ImgBB API Key <span style="font-size:10px;font-weight:400;color:var(--t4)">— untuk auto upload gambar</span></label><div style="display:flex;gap:5px"><input type="text" class="fi" id="odImgBB" placeholder="Dapatkan di api.imgbb.com" style="flex:1"><button onclick="clearImgBBKey()" style="padding:7px 10px;background:var(--bg2);border:1.5px solid var(--bd);border-radius:var(--r10);font-size:11px;font-weight:700;color:var(--red);cursor:pointer;flex-shrink:0;font-family:inherit">✕</button></div><p style="font-size:10px;color:var(--t4);margin-top:3px">Gratis di <a href="https://api.imgbb.com" target="_blank" style="color:var(--g600);font-weight:700">api.imgbb.com</a> — unlimited upload!</p></div>
           <button onclick="saveKeys()" style="width:100%;padding:9px;background:var(--g600);color:white;border:none;border-radius:var(--r10);font-size:13px;font-weight:800;cursor:pointer;box-shadow:var(--shg);font-family:inherit">💾 Simpan Keys</button>
         </div>
         <!-- Ganti Password -->
@@ -986,8 +1007,8 @@ img{display:block;max-width:100%}
 // ════ CONFIG & STATE ════
 const CFG={
   OWNER:'KingGG',MODEL:'llama-3.3-70b-versatile',
-  get DB_URL(){return localStorage.getItem('mc-dburl')||localStorage.getItem('mcaddn-db-url')||'https://game-spaniel-72287.upstash.io'},
-  get DB_TOK(){return localStorage.getItem('mc-dbtok')||localStorage.getItem('mcaddn-db-token')||'gQAAAAAAARpfAAIncDE0OGM2YjVkN2JkY2U0ZTczOGZhNjNkODIxOWEyZWMzN3AxNzIyODc'},
+  get DB_URL(){return localStorage.getItem('mc-dburl')||'https://game-spaniel-72287.upstash.io'},
+  get DB_TOK(){return localStorage.getItem('mc-dbtok')||'gQAAAAAAARpfAAIncDE0OGM2YjVkN2JkY2U0ZTczOGZhNjNkODIxOWEyZWMzN3AxNzIyODc'},
   get GROQ(){return localStorage.getItem('mc-groq')||'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'},
   get IMGBB(){return localStorage.getItem('mc-imgbb')||'36b2a111049c6bdeea787f17d636bde4'},
 };
@@ -1064,8 +1085,12 @@ function closeOv(id){document.getElementById(id).classList.remove('open');docume
 // ════ DB ════
 const isDB=()=>!!(CFG.DB_URL&&CFG.DB_TOK);
 async function upCmd(...a){
-  const r=await fetch(`${CFG.DB_URL}/${a.map(x=>encodeURIComponent(typeof x==='object'?JSON.stringify(x):x)).join('/')}`,{headers:{'Authorization':'Bearer '+CFG.DB_TOK}});
-  if(!r.ok)throw new Error('Redis '+r.status);
+  const r=await fetch(`${CFG.DB_URL.replace(/\/$/,'')}/${a.map(x=>encodeURIComponent(typeof x==='object'?JSON.stringify(x):x)).join('/')}`,{headers:{'Authorization':'Bearer '+CFG.DB_TOK}});
+  if(!r.ok){
+    let msg='';
+    try{const j=await r.json();msg=j.error||j.message||''}catch{}
+    throw new Error(`Redis ${r.status}${r.status===401?' (Token salah/expired)':r.status===403?' (Akses ditolak)':r.status===404?' (URL DB salah)':''}${msg?' — '+msg:''}`);
+  }
   return(await r.json()).result;
 }
 async function dbGet(k){try{const r=await upCmd('GET','mcaddn:'+k);return r?JSON.parse(r):null}catch{return null}}
@@ -1100,7 +1125,10 @@ async function saveP(){
       const dbData=P.map(p=>({...p,img:p.img?.startsWith('data:')?'':p.img}));
       await dbSet('packs',dbData);
       dbOk=true;
-    }catch(e){console.warn('DB save error:',e.message)}
+    }catch(e){
+      console.warn('DB save error:',e.message);
+      toast('DB gagal: '+e.message,'err');
+    }
   }
   // Simpan ke localStorage
   try{
@@ -2903,8 +2931,20 @@ function renderOdSettings(){
   const dUrl=document.getElementById('odDbUrl'),dTok=document.getElementById('odDbTok'),gKey=document.getElementById('odGroq'),iKey=document.getElementById('odImgBB');
   if(dUrl)dUrl.value=CFG.DB_URL;if(dTok)dTok.value=CFG.DB_TOK;if(gKey)gKey.value=CFG.GROQ;if(iKey)iKey.value=CFG.IMGBB;
   const dbSt=document.getElementById('dbSt'),aiSt=document.getElementById('aiSt');
-  if(dbSt)dbSt.innerHTML=isDB()?`<span style="color:var(--g600)">✓ Terhubung</span>`:`<span style="color:var(--red)">✗ Belum diisi</span>`;
+  if(dbSt)dbSt.innerHTML=CFG.DB_URL&&CFG.DB_TOK?`<span style="color:var(--amb)">? Belum dites</span>`:`<span style="color:var(--red)">✗ Belum diisi</span>`;
   if(aiSt)aiSt.innerHTML=CFG.GROQ?`<span style="color:var(--g600)">✓ Aktif</span>`:`<span style="color:var(--red)">✗ Belum diisi</span>`;
+  // Tampilkan setup guide kalau belum ada credentials
+  const guide=document.getElementById('setupGuide');
+  if(guide){
+    const needsSetup=!CFG.DB_URL||!CFG.DB_TOK||!CFG.GROQ;
+    guide.style.display=needsSetup?'block':'none';
+    if(needsSetup){
+      const items=[];
+      if(!CFG.DB_URL||!CFG.DB_TOK)items.push('🗄️ <strong>Upstash Redis</strong> — <a href="https://upstash.com" target="_blank" style="color:var(--blu);font-weight:700">upstash.com</a> → Buat database → Copy REST URL & Token');
+      if(!CFG.GROQ)items.push('🤖 <strong>Groq AI</strong> — <a href="https://console.groq.com" target="_blank" style="color:var(--blu);font-weight:700">console.groq.com</a> → API Keys → Create Key');
+      guide.innerHTML=`<div style="background:var(--amb2);border:1.5px solid #fcd34d;border-radius:var(--r14);padding:12px 14px;margin-bottom:11px"><div style="font-size:12.5px;font-weight:900;color:var(--amb);margin-bottom:8px">⚠️ Setup belum lengkap!</div>${items.map(i=>`<div style="font-size:11.5px;color:var(--t2);line-height:1.7;margin-bottom:5px">• ${i}</div>`).join('')}<div style="font-size:11px;color:var(--t4);margin-top:7px;line-height:1.6">Isi credentials di bawah lalu klik <strong>Simpan Keys</strong> dan <strong>Tes Koneksi</strong>.</div></div>`;
+    }
+  }
   // Load owner profile & site settings
   const ss=JSON.parse(localStorage.getItem('mc-settings')||'{}');
   const son=document.getElementById('setOwnerName');if(son)son.value=ss.ownerName||CFG.OWNER;
@@ -3037,20 +3077,29 @@ function saveKeys(){
   if(tok)localStorage.setItem('mc-dbtok',tok);
   if(groq){localStorage.setItem('mc-groq',groq);localStorage.removeItem('mcaddn-groq-key')}
   if(imgbb)localStorage.setItem('mc-imgbb',imgbb);
+  // Hapus key lama yang mungkin masih numpang
+  localStorage.removeItem('mcaddn-db-url');
+  localStorage.removeItem('mcaddn-db-token');
   renderOdSettings();toast('Keys disimpan! 💾','vip');
 }
 async function upTest(){
   const url=document.getElementById('odDbUrl')?.value.trim(),tok=document.getElementById('odDbTok')?.value.trim();
   if(!url||!tok){toast('Isi URL dan Token dulu!','err');return}
   const btn=document.getElementById('dbTestBtn');if(btn){btn.textContent='Testing...';btn.disabled=true}
+  const st=document.getElementById('dbSt');
   try{
     const r=await fetch(`${url.replace(/\/$/,'')}/PING`,{headers:{'Authorization':'Bearer '+tok}});
-    if(r.status===401)throw new Error('Token tidak valid');
-    if(!r.ok)throw new Error('URL tidak valid ('+r.status+')');
-    const d=await r.json();if(d.result!=='PONG')throw new Error('Respons tidak valid');
+    if(r.status===401){throw new Error('Token salah atau expired — buat token baru di Upstash Console')}
+    if(r.status===403){throw new Error('Akses ditolak — cek permission token')}
+    if(r.status===404){throw new Error('URL salah — pastikan format: https://xxx.upstash.io')}
+    if(!r.ok){throw new Error('Error '+r.status)}
+    const d=await r.json();if(d.result!=='PONG')throw new Error('Respons tidak valid: '+JSON.stringify(d));
     toast('✅ Koneksi DB berhasil!','vip');
-    const st=document.getElementById('dbSt');if(st)st.innerHTML=`<span style="color:var(--g600)">✓ OK</span>`;
-  }catch(e){toast('❌ DB Error: '+e.message,'err');const st=document.getElementById('dbSt');if(st)st.innerHTML=`<span style="color:var(--red)">✗ ${e.message}</span>`}
+    if(st)st.innerHTML=`<span style="color:var(--g600)">✓ OK — Terhubung!</span>`;
+  }catch(e){
+    toast('❌ '+e.message,'err');
+    if(st)st.innerHTML=`<span style="color:var(--red);font-size:10.5px">✗ ${e.message}</span>`;
+  }
   if(btn){btn.textContent='Tes Koneksi';btn.disabled=false}
 }
 let groqKeyVis=false;
@@ -3135,13 +3184,8 @@ window.addEventListener('ac',e=>{
         const val=localStorage.getItem(oldK);
         if(val&&!localStorage.getItem(newK)){localStorage.setItem(newK,val);migrated++}
       });
-      // Kalau DB v4 ada tapi mc-dburl belum diisi, copy dari hardcoded v4
-      if(!localStorage.getItem('mc-dburl')){
-        localStorage.setItem('mc-dburl','https://game-spaniel-72287.upstash.io');migrated++;
-      }
-      if(!localStorage.getItem('mc-dbtok')){
-        localStorage.setItem('mc-dbtok','gQAAAAAAARpfAAIncDE0OGM2YjVkN2JkY2U0ZTczOGZhNjNkODIxOWEyZWMzN3AxNzIyODc');migrated++;
-      }
+      // JANGAN auto-set default DB credentials milik KingGG
+      // User harus isi sendiri di Owner Dashboard → Settings → API Keys
       localStorage.setItem('mc-migrated-v4','1');
       if(migrated>0)console.log(`MCAddn: migrasi ${migrated} data dari v4 ✓`);
     }catch(e){console.warn('Migrasi v4 gagal:',e)}
