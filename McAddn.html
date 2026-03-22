@@ -768,7 +768,7 @@ img{display:block;max-width:100%}
       <div class="fg"><label class="fl">Link Sosial</label><input type="text" class="fi" id="profLink" placeholder="https://youtube.com/c/..."></div>
       <div id="profNote" style="display:none;background:var(--amb2);border:1px solid #fcd34d;border-radius:var(--r10);padding:7px 10px;font-size:11px;color:var(--amb);line-height:1.6">⚠️ Belum login. Profil hanya disimpan di browser ini. <span style="font-weight:800;cursor:pointer;text-decoration:underline" onclick="closeOv('profOv');openOv('authOv')">Login →</span></div>
     </div>
-    <div class="mft"><button class="btn-c" onclick="closeOv('profOv')">Batal</button><button class="btn-s" onclick="saveProfile()"><svg width="11" height="11"><use href="#i-check"/></svg> Simpan</button></div>
+    <div class="mft"><button class="btn-c" onclick="closeOv('profOv')">Batal</button><button class="btn-s" onclick="this.disabled=true;saveProfile().finally(()=>this.disabled=false)"><svg width="11" height="11"><use href="#i-check"/></svg> Simpan</button></div>
   </div>
 </div>
 
@@ -1183,13 +1183,14 @@ async function doLogout(){
 window.addEventListener('authChange',e=>{
   curUser=e.detail;renderAuth();renderLbrClaimCard();
   if(curUser){
-    // Kunci nama creator ke nama Google
     lockCreatorName();
-    // Isi field creator di upload form
     const fc=document.getElementById('fCreator');
     if(fc)fc.value=getCreatorName();
-    // Update profil namedisplay
     if(!UP.name&&curUser.displayName){UP.name=curUser.displayName;localStorage.setItem('mc-prof',JSON.stringify(UP))}
+    // Auto-cache foto Google supaya muncul di creator page
+    if(curUser.photoURL&&UP.name){
+      localStorage.setItem('mc-cpic-'+UP.name.toLowerCase(),curUser.photoURL);
+    }
   }
   if(document.getElementById('mProfil')?.style.display==='block')renderMProfil();
 });
@@ -1900,8 +1901,11 @@ function openCreator(creator){
   const totalLk=packs.reduce((s,p)=>s+(p.likes||0),0);
   const totalPacks=packs.length;
   const follow=isFollowing(creator);
-  // Get creator photo from their packs' uploads or profile cache
-  const creatorPhoto=localStorage.getItem('mc-cpic-'+creator.toLowerCase())||'';
+  // Foto creator: kalau ini user sendiri pakai getP() langsung, kalau orang lain cek cache
+  const isMe=getN()&&creator.toLowerCase()===getN().toLowerCase();
+  const creatorPhoto=isMe
+    ? (getP()||curUser?.photoURL||localStorage.getItem('mc-cpic-'+creator.toLowerCase())||'')
+    : (localStorage.getItem('mc-cpic-'+creator.toLowerCase())||curUser?.photoURL&&creator.toLowerCase()===getN().toLowerCase()?curUser.photoURL:'');
   const bio=localStorage.getItem('mc-cbio-'+creator.toLowerCase())||'';
   const link=localStorage.getItem('mc-clink-'+creator.toLowerCase())||'';
   const m=document.createElement('div');m.className='ov';m.style.display='block';m.id='cpOv';
@@ -2683,18 +2687,15 @@ function handleProfImg(inp){
     UP._local=src;UP.imgUrl='local';
   };r.readAsDataURL(f);
 }
-function saveProfile(){
+async function saveProfile(){
   const name=document.getElementById('profName')?.value.trim();
   if(!name){toast('Nama wajib diisi!','err');return}
   const oldName=UP.name||'';
-  // Cek apakah nama berubah
   const nameChanged=oldName&&oldName.toLowerCase()!==name.toLowerCase();
   if(nameChanged){
-    // Rename semua pack lama ikut nama baru
     let renamed=0;
     P.forEach(p=>{if(p.creator&&p.creator.toLowerCase()===oldName.toLowerCase()){p.creator=name;renamed++}});
     if(renamed>0){saveP();toast(`✓ ${renamed} pack direname ke "${name}"!`,'vip')}
-    // Hapus cache bio/foto nama lama, pindah ke nama baru
     ['mc-cbio-','mc-cpic-','mc-clink-'].forEach(prefix=>{
       const val=localStorage.getItem(prefix+oldName.toLowerCase());
       if(val){localStorage.setItem(prefix+name.toLowerCase(),val);localStorage.removeItem(prefix+oldName.toLowerCase())}
@@ -2703,17 +2704,36 @@ function saveProfile(){
   UP.name=name;
   UP.bio=document.getElementById('profBio')?.value.trim()||'';
   UP.link=document.getElementById('profLink')?.value.trim()||'';
+
+  // FIX: simpan URL foto tanpa cek photoURL - kondisi lama bisa skip save
   const urlVal=document.getElementById('profImgUrl')?.value.trim();
-  if(urlVal&&urlVal!==curUser?.photoURL)UP.imgUrl=urlVal;
-  localStorage.setItem('mc-prof',JSON.stringify(UP));
-  // Cache bio, link, photo untuk creator page
+  if(urlVal)UP.imgUrl=urlVal;
+
+  // FIX: compress _local base64 supaya tidak penuh localStorage
+  if(UP._local&&UP._local.startsWith('data:')){
+    try{UP._local=await compressImg(UP._local,100)}catch{}
+  }
+
+  // FIX: try-catch pada localStorage save
+  try{
+    localStorage.setItem('mc-prof',JSON.stringify(UP));
+  }catch(e){
+    // Kalau penuh, coba simpan tanpa _local
+    try{
+      const slim={...UP,_local:null};
+      localStorage.setItem('mc-prof',JSON.stringify(slim));
+      UP._local=null;
+      toast('Foto lokal tidak tersimpan (storage penuh), pakai link URL','err');
+    }catch(e2){toast('Gagal simpan profil: storage penuh!','err');return}
+  }
+
   const cname=name.toLowerCase();
   if(UP.bio)localStorage.setItem('mc-cbio-'+cname,UP.bio);
   if(UP.link)localStorage.setItem('mc-clink-'+cname,UP.link);
-  const photo=getP();if(photo)localStorage.setItem('mc-cpic-'+cname,photo);
+  const photo=getP();if(photo&&!photo.startsWith('data:'))localStorage.setItem('mc-cpic-'+cname,photo);
   closeOv('profOv');renderAuth();renderAll();
   if(document.getElementById('mProfil')?.style.display==='block')renderMProfil();
-  toast(!nameChanged?'Profil disimpan!':'Nama diubah — semua pack ikut update! ✓','vip');
+  toast(!nameChanged?'Profil disimpan! ✓':'Nama diubah — semua pack ikut update! ✓','vip');
 }
 
 // ════ LEBARAN ════
