@@ -3,13 +3,64 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MCAddn — Minecraft Add-on Community Indonesia</title>
+
+<!-- ══ SEO DASAR ══ -->
+<title>MCAddn — Platform Add-on Minecraft Indonesia Terlengkap</title>
+<meta name="description" content="Platform komunitas Minecraft Indonesia untuk upload, download, dan berbagi add-on, texture pack, map, shader, skin, dan mod MCPE/Bedrock. Gratis, AI-powered, dimoderasi owner.">
+<meta name="keywords" content="minecraft add-on indonesia, mcpe addon, minecraft bedrock addon, texture pack minecraft, minecraft mod indonesia, download addon minecraft, komunitas minecraft indonesia, mcaddn">
+<meta name="author" content="KingGG · MCAddn">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://robloxxhabibiz.github.io/McAddn/McAddn.html">
+
+<!-- ══ OPEN GRAPH (WhatsApp, Facebook, Telegram) ══ -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MCAddn">
+<meta property="og:title" content="MCAddn — Platform Add-on Minecraft Indonesia">
+<meta property="og:description" content="Upload dan download add-on, texture pack, map, shader Minecraft MCPE/Bedrock. Komunitas Indonesia terlengkap. AI otomatis buat deskripsi!">
+<meta property="og:url" content="https://robloxxhabibiz.github.io/McAddn/McAddn.html">
+<meta property="og:image" content="https://robloxxhabibiz.github.io/McAddn/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="id_ID">
+
+<!-- ══ TWITTER / X CARD ══ -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MCAddn — Add-on Minecraft Indonesia">
+<meta name="twitter:description" content="Platform komunitas Minecraft Indonesia. Download addon, texture, map, shader MCPE gratis!">
+<meta name="twitter:image" content="https://robloxxhabibiz.github.io/McAddn/og-image.jpg">
+
+<!-- ══ STRUCTURED DATA (Google Rich Results) ══ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "MCAddn",
+  "url": "https://robloxxhabibiz.github.io/McAddn/McAddn.html",
+  "description": "Platform komunitas Minecraft Indonesia untuk upload dan download add-on, texture pack, map, shader, skin, dan mod MCPE/Bedrock.",
+  "inLanguage": "id-ID",
+  "publisher": {
+    "@type": "Organization",
+    "name": "MCAddn",
+    "url": "https://robloxxhabibiz.github.io/McAddn/McAddn.html"
+  },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://robloxxhabibiz.github.io/McAddn/McAddn.html?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
 <meta name="theme-color" content="#16a34a">
+<meta name="google-site-verification" content="PO5CGkKPPfeZvbbcb0Rk29lOerwlRhLUHnlEhrjPQXs" />
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
 <script type="module">
 import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import{getAuth,signInWithPopup,signInWithRedirect,getRedirectResult,signOut,onAuthStateChanged,GoogleAuthProvider,GithubAuthProvider}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-const FB={apiKey:"AIzaSyD3Yz2jyBkWnRqFQgrOi3tWIn_UpEXAEPA",authDomain:"mcaddn.firebaseapp.com",projectId:"mcaddn",storageBucket:"mcaddn.firebasestorage.app",messagingSenderId:"229803949526",appId:"1:229803949526:web:c54462fe7007ddff77b877"};
+const FB={apiKey:"ini api key",authDomain:"mcaddn.firebaseapp.com",projectId:"mcaddn",storageBucket:"mcaddn.firebasestorage.app",messagingSenderId:"229803949526",appId:"ini app id"};
 const isPopupBrowser=()=>/Chrome/i.test(navigator.userAgent)&&!/SamsungBrowser|FBAV|Instagram|GSA/i.test(navigator.userAgent);
 const needsRedirect=()=>/SamsungBrowser|FBAV|Instagram|GSA|WebView/i.test(navigator.userAgent)||(!/Chrome/i.test(navigator.userAgent)&&/Android/i.test(navigator.userAgent));
 try{
@@ -1007,10 +1058,10 @@ img{display:block;max-width:100%}
 // ════ CONFIG & STATE ════
 const CFG={
   OWNER:'KingGG',MODEL:'llama-3.3-70b-versatile',
-  get DB_URL(){return localStorage.getItem('mc-dburl')||'https://game-spaniel-72287.upstash.io'},
-  get DB_TOK(){return localStorage.getItem('mc-dbtok')||'gQAAAAAAARpfAAIncDE0OGM2YjVkN2JkY2U0ZTczOGZhNjNkODIxOWEyZWMzN3AxNzIyODc'},
-  get GROQ(){return localStorage.getItem('mc-groq')||'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'},
-  get IMGBB(){return localStorage.getItem('mc-imgbb')||'36b2a111049c6bdeea787f17d636bde4'},
+  get DB_URL(){return localStorage.getItem('mc-dburl')||''},
+  get DB_TOK(){return localStorage.getItem('mc-dbtok')||''},
+  get GROQ(){return localStorage.getItem('mc-groq')||''},
+  get IMGBB(){return localStorage.getItem('mc-imgbb')||''},
 };
 let P=[],LIKES=new Set(),BKS=new Set(),RATS={},FT=new Set(),VIP=new Set();
 let posts=[],PLIKES=new Set(),pcat='all';
